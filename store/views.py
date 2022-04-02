@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import requests
 import json
+import sys
+from subprocess import run, PIPE
 
 
 # Create your views here.

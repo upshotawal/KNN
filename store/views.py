@@ -1,3 +1,4 @@
+from os import stat
 import django
 from django.contrib.auth.models import User
 from store.models import Address, Cart, Category, Order, Product
@@ -14,6 +15,8 @@ import requests
 import json
 import sys
 from subprocess import run, PIPE
+from django.http import HttpResponseRedirect
+from .models import contactEnquiry
 
 
 # Create your views here.
@@ -218,6 +221,24 @@ def orders(request):
     all_orders = Order.objects.filter(
         user=request.user).order_by('-ordered_date')
     return render(request, 'store/orders.html', {'orders': all_orders})
+
+
+def saveEnquiry(request):
+    if request.method == "POST":
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        company = company.POST.get('company')
+        country = country.POST.get('country')
+        adderess1 = adderess1.POST.get('adderess1')
+        adderess2 = adderess2.POST.get('adderess2')
+        town = town.POST.get('town')
+        state = state.POST.get('state')
+        en = contactEnquiry(fname=fname, lname=lname, email=email, phone=phone, company=company,
+                            country=country, adderess1=adderess1, adderess2=adderess2, town=town, state=state)
+        en.save()
+    return render(request, "store/order.html")
 
 
 def shop(request):

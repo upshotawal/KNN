@@ -156,7 +156,7 @@
             </div>
             <div class="col-md-6 text-md-right">
               
-              <a class="btn btn-outline-dark btn-sm" href={% url 'store:orders' %}
+              <a class="btn btn-outline-dark btn-sm" href="{% url 'store:orders' %}"
                 >Order Details<i
                   class="fas fa-long-arrow-alt-right ml-2"
                 ></i
@@ -226,14 +226,8 @@
             </br>
 
               {% comment %} For Cash on Delivery {% endcomment %}
-              <button
-                type="submit"
-                class="btn btn-dark btn-lg btn-outline-dark"
-                type="submit"
-              >
-
-                <i class="fas fa-dollar-sign mr-2" ></i>Cash on Delivery
-              </button>
+              <a class="btn btn-outline-dark btn-sm" href="{% url 'store:checkout' %}"
+              >Cash on Delivery</a>
             </form>
           </div>
         </div>

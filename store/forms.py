@@ -1,5 +1,5 @@
 from django.contrib.auth import password_validation
-from store.models import Address
+from store.models import Address, contactEnquiry
 from django import forms
 import django
 from django.contrib.auth.models import User
@@ -9,6 +9,7 @@ from django.db.models import fields
 from django.forms import widgets
 from django.forms.fields import CharField
 from django.utils.translation import gettext, gettext_lazy as _
+from store.models import contactEnquiry
 
 
 
@@ -50,3 +51,7 @@ class SetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(label=_("New Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete':'new-password', 'class':'form-control'}), help_text=password_validation.password_validators_help_text_html())
     new_password2 = forms.CharField(label=_("Confirm Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete':'new-password','class':'form-control'}))
 
+class UserInfo(forms.ModelForm):
+    class Meta:
+        model = contactEnquiry
+        fields = ['fname','lname','email','phone','company','adderess1','adderess2','country','town','state']

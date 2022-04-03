@@ -226,7 +226,7 @@
             </br>
 
               {% comment %} For Cash on Delivery {% endcomment %}
-              <a class="btn btn-outline-dark btn-sm" href="{% url 'store:checkout' %}"
+              <a class="btn btn-outline-dark btn-sm" href="{% url 'store:chkout' %}"
               >Cash on Delivery</a>
             </form>
           </div>
@@ -251,9 +251,9 @@
 <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 
 <script>
-  {% comment %} function verifyPayment(payload) {
+   function verifyPayment(payload) {
     $.ajax({
-      url: "{% url 'verify_payment' %}",
+      url: "{% url 'store:verify_payment' %}",
       type: "POST",
       data: payload,
       dataType: "json",
@@ -264,7 +264,8 @@
         alert(error.responseJSON["message"]);
       },
     });
-  } {% endcomment %}
+  } 
+  
   var config = {
     // replace the publicKey with yours
     publicKey: "test_public_key_b8af7d684b334617af3c6939a3172f10",

@@ -213,7 +213,7 @@ def checkout(request):
               product=c.product, quantity=c.quantity).save()
         # And Deleting from Cart
         c.delete()
-    return render(request, 'store/checkout.html')
+    return render(request, 'store:checkout.html')
 
 
 @login_required
@@ -223,22 +223,31 @@ def orders(request):
     return render(request, 'store/orders.html', {'orders': all_orders})
 
 
-def saveEnquiry(request):
-    if request.method == "POST":
-        fname = request.POST.get('fname')
-        lname = request.POST.get('lname')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        company = company.POST.get('company')
-        country = country.POST.get('country')
-        adderess1 = adderess1.POST.get('adderess1')
-        adderess2 = adderess2.POST.get('adderess2')
-        town = town.POST.get('town')
-        state = state.POST.get('state')
-        en = contactEnquiry(fname=fname, lname=lname, email=email, phone=phone, company=company,
-                            country=country, adderess1=adderess1, adderess2=adderess2, town=town, state=state)
-        en.save()
-    return render(request, "store/order.html")
+# def saveEnquiry(request):
+#     if request.method == "POST":
+#         fname = request.POST.get('fname')
+#         lname = request.POST.get('lname')
+#         email = request.POST.get('email')
+#         phone = request.POST.get('phone')
+#         company = company.POST.get('company')
+#         country = country.POST.get('country')
+#         adderess1 = adderess1.POST.get('adderess1')
+#         adderess2 = adderess2.POST.get('adderess2')
+#         town = town.POST.get('town')
+#         state = state.POST.get('state')
+#         en = contactEnquiry(fname=fname, lname=lname, email=email, phone=phone, company=company,
+#                             country=country, adderess1=adderess1, adderess2=adderess2, town=town, state=state)
+#         en.save()
+#     return render(request, "store/orders.html")
+
+def UserInfo(request):
+    if request.method == 'POST':
+        form = UserInfo(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = UserInfo()
+    return render(request, "store/orders.html")
 
 
 def shop(request):
@@ -247,6 +256,9 @@ def shop(request):
 
 def test(request):
     return render(request, 'store/test.html')
+
+def chkout(request):
+    return render(request, 'store/chkout.html')
 
 
 @csrf_exempt

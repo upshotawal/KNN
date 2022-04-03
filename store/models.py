@@ -135,5 +135,4 @@ class contactEnquiry(models.Model):
     town = models.CharField(max_length=200)
     state = models.IntegerField(default=000)
 
-    def __str__(self):
-        return self.fname
+    

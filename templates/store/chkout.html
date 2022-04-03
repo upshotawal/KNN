@@ -28,13 +28,14 @@
           <h2 class="h5 text-uppercase mb-4">Billing details</h2>
           <div class="row">
             <div class="col-lg-8">
-              <form action="{% url 'saveenquiry' %}">
+              
+              <form method="POST">
                 {% csrf_token %}
                 <div class="row">
                   <div class="col-lg-6 form-group">
                     <label class="text-small text-uppercase" for="fname">First name</label>
                     <input class="form-control form-control-lg" id="fname" type="text" placeholder="Enter your first name">
-                  </div>
+                  </div> 
                   <div class="col-lg-6 form-group">
                     <label class="text-small text-uppercase" for="lname">Last name</label>
                     <input class="form-control form-control-lg" id="lname" type="text" placeholder="Enter your last name">

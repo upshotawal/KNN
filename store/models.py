@@ -126,13 +126,4 @@ class contactEnquiry(models.Model):
     fname = models.CharField(max_length=30)
     lname = models.CharField(max_length=20)
     email = models.EmailField()
-    phone = models.IntegerField(blank=True, unique=True)
-    company = models.CharField(max_length=200)
-    country = models.CharField(
-        max_length=50, choices=STATUS_CHOICES, default="Nepal")
-    adderess1 = models.CharField(max_length=100)
-    adderess2 = models.CharField(max_length=200)
-    town = models.CharField(max_length=200)
-    state = models.IntegerField(default=000)
-
-    
+    phone = models.CharField(max_length=15)

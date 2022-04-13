@@ -199,7 +199,6 @@ def minus_cart(request, cart_id):
     return redirect('store:cart')
 
 
-@login_required
 def checkout(request):
     user = request.user
     address_id = request.GET.get('address')
@@ -213,7 +212,7 @@ def checkout(request):
               product=c.product, quantity=c.quantity).save()
         # And Deleting from Cart
         c.delete()
-    return render(request, 'store:checkout.html')
+    return JsonResponse("Thabk you for the purchase at Amogle !!", safe=False)
 
 
 @login_required
@@ -260,28 +259,13 @@ def test(request):
 
 def chkout(request):
     user = request.user
-    # address_id = request.GET.get('address')
-
-    # address = get_object_or_404(Address, id=address_id)
-    # # Get all the products of User in Cart
-    # cart = Cart.objects.filter(user=user)
-    # for c in cart:
-    #     # Saving all the products from Cart to Order
-    #     Order(user=user, address=address,
-    #           product=c.product, quantity=c.quantity).save()
-    #     # And Deleting from Cart
-    #     c.delete()
     amount = decimal.Decimal(0)
     shipping_amount = decimal.Decimal(10)
-    # using list comprehension to calculate total amount based on quantity and shipping
     cp = [p for p in Cart.objects.all() if p.user == user]
     if cp:
         for p in cp:
             temp_amount = (p.quantity * p.product.price)
             amount += temp_amount
-
-    # Customer Addresses
-    addresses = Address.objects.filter(user=user)
 
     context = {
         'amount': amount,

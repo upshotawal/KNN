@@ -10,16 +10,18 @@ import decimal
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator  # for Class Based Views
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 import requests
 import json
 import sys
 from subprocess import run, PIPE
 from django.http import HttpResponseRedirect
 from .models import contactEnquiry
-
+from .models import Post
+from .forms import CommentForm
 
 # Create your views here.
+
 
 def home(request):
     categories = Category.objects.filter(is_active=True, is_featured=True)[:3]
@@ -307,3 +309,36 @@ def verify_payment(request):
     pp.pprint(response_data)
 
     return JsonResponse(f"Payment Done !! With IDX. {response_data['user']['idx']}", safe=False)
+
+
+def simple_function(request):
+    inp = request.POST.get('param')
+
+    out = run([sys.executable,
+              '//script.py//', inp], shell=False, stout=PIPE)
+    print(out)
+    return render(request, 'index.html')
+
+
+def blog(request):
+    posts = Post.objects.all()
+    return render(request, "main/blog.html", {"posts": posts})
+
+
+def post_detail(request, slug):
+    post = Post.objects.get(slug=slug)
+
+    if request.method == 'POST':  # using if conditions to update the page if new commnets are submitted
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+
+            return redirect('post_detail', slug=post.slug)
+            # return HttpResponseRedirect("/registered")
+    else:
+        form = CommentForm()
+
+    return render(request, "main/post_detail.html", {'post': post, 'form': form, })

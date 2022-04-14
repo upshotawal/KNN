@@ -18,8 +18,12 @@ urlpatterns = [
     path('checkout/', views.checkout, name="checkout"),
     path('chkout/', views.chkout, name="chkout"),
     path('orders/', views.orders, name="orders"),
-#     path("saveenquiry", views.saveEnquiry, name="saveenquiry"),
+    #     path("saveenquiry", views.saveEnquiry, name="saveenquiry"),
     path("userinfo", views.UserInfo, name="userinfo"),
+    path("simple_function", views.simple_function),
+    path("blog/", views.blog, name="blog"),
+    # using slug insted of id to path
+    path('blog/<slug:slug>/', views.post_detail, name="post_detail"),
 
     # URL for Products
     path('product/<slug:slug>/', views.detail, name="product-detail"),

@@ -1,5 +1,5 @@
 from django.contrib.auth import password_validation
-from store.models import Address, contactEnquiry
+from store.models import Address, Comments, contactEnquiry
 from django import forms
 import django
 from django.contrib.auth.models import User
@@ -68,3 +68,9 @@ class UserInfo(forms.ModelForm):
     class Meta:
         model = contactEnquiry
         fields = ['fname', 'lname', 'email', 'phone']
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comments
+        fields = ['name', 'email', 'body']

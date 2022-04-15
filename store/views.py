@@ -1,4 +1,5 @@
 from os import stat
+from site import addusersitepackages
 import django
 from django.contrib.auth.models import User
 from store.models import Address, Cart, Category, Order, Product
@@ -10,7 +11,7 @@ import decimal
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator  # for Class Based Views
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 import requests
 import json
 import sys
@@ -199,55 +200,43 @@ def minus_cart(request, cart_id):
     return redirect('store:cart')
 
 
-@login_required
-def checkout(request):
-    user = request.user
-    address_id = request.GET.get('address')
+# @login_required
+# def checkout(request):
+#     user = request.user
+#     address_id = request.GET.get('address')
 
-    address = get_object_or_404(Address, id=address_id)
-    # Get all the products of User in Cart
-    cart = Cart.objects.filter(user=user)
-    for c in cart:
-        # Saving all the products from Cart to Order
-        Order(user=user, address=address,
-              product=c.product, quantity=c.quantity).save()
-        # And Deleting from Cart
-        c.delete()
-    return render(request, 'store:checkout.html')
+#     address = get_object_or_404(Address, id=address_id)
+#     # Get all the products of User in Cart
+#     cart = Cart.objects.filter(user=user)
+#     for c in cart:
+#         # Saving all the products from Cart to Order
+#         Order(user=user, address=address,
+#               product=c.product, quantity=c.quantity).save()
+#         # And Deleting from Cart
+#         c.delete()
+#     return HttpResponse("<h1> Thank you for your purchase</h1>")
 
 
 @login_required
 def orders(request):
+    # user = request.user
+    # address_id = request.GET.get('address')
+
+    # address = get_object_or_404(Address, id=address_id)
+    # # Get all the products of User in Cart
+    # cart = Cart.objects.filter(user=user)
+    # for c in cart:
+    #     # Saving all the products from Cart to Order
+    #     Order(user=user, address=address,
+    #           product=c.product, quantity=c.quantity).save()
+    #     # And Deleting from Cart
+    #     c.delete()
     all_orders = Order.objects.filter(
         user=request.user).order_by('-ordered_date')
     return render(request, 'store/orders.html', {'orders': all_orders})
 
 
-# def saveEnquiry(request):
-#     if request.method == "POST":
-#         fname = request.POST.get('fname')
-#         lname = request.POST.get('lname')
-#         email = request.POST.get('email')
-#         phone = request.POST.get('phone')
-#         company = company.POST.get('company')
-#         country = country.POST.get('country')
-#         adderess1 = adderess1.POST.get('adderess1')
-#         adderess2 = adderess2.POST.get('adderess2')
-#         town = town.POST.get('town')
-#         state = state.POST.get('state')
-#         en = contactEnquiry(fname=fname, lname=lname, email=email, phone=phone, company=company,
-#                             country=country, adderess1=adderess1, adderess2=adderess2, town=town, state=state)
-#         en.save()
-#     return render(request, "store/orders.html")
 
-def UserInfo(request):
-    if request.method == 'POST':
-        form = UserInfo(request.POST)
-        if form.is_valid():
-            form.save()
-    else:
-        form = UserInfo()
-    return render(request, "store/orders.html")
 
 
 def shop(request):
@@ -258,7 +247,40 @@ def test(request):
     return render(request, 'store/test.html')
 
 def chkout(request):
-    return render(request, 'store/chkout.html')
+    user = request.user
+    if request.method == "POST":
+        form = contactEnquiry()
+        name = request.POST.get('name')
+        reciver = request.POST.get('reciver')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        form.name=name
+        form.reciver=reciver
+        form.email=email
+        form.phone=phone
+        form.save()
+        return redirect('store:profile')
+
+
+    addresses = Address.objects.filter(user=user)
+    # Display Total on Cart Page
+    amount = decimal.Decimal(0)
+    shipping_amount = decimal.Decimal(10)
+    # using list comprehension to calculate total amount based on quantity and shipping
+    cp = [p for p in Cart.objects.all() if p.user == user]
+    if cp:
+        for p in cp:
+            temp_amount = (p.quantity * p.product.price)
+            amount += temp_amount
+    
+    context = {
+        
+        'amount': amount,
+        'shipping_amount': shipping_amount,
+        'total_amount': amount + shipping_amount,
+        'addresses': addresses,
+    }
+    return render(request, 'store/chkout.html',context)
 
 
 @csrf_exempt

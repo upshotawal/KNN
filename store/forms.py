@@ -51,7 +51,4 @@ class SetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(label=_("New Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete':'new-password', 'class':'form-control'}), help_text=password_validation.password_validators_help_text_html())
     new_password2 = forms.CharField(label=_("Confirm Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete':'new-password','class':'form-control'}))
 
-class UserInfo(forms.ModelForm):
-    class Meta:
-        model = contactEnquiry
-        fields = ['fname','lname','email','phone','company','adderess1','adderess2','country','town','state']
+

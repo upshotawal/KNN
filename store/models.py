@@ -126,9 +126,38 @@ class contactEnquiry(models.Model):
     name = models.CharField(max_length=30)
     reciver = models.CharField(max_length=20)
     email = models.EmailField()
+<<<<<<< HEAD
     phone = models.IntegerField(blank=True, unique=True)
     
     def __str__(self):
         return self.name
+=======
+    phone = models.CharField(max_length=15)
+>>>>>>> 29cc043dc844990bd62c6ec1124a253860fa1b8a
 
-    
+
+class Post(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField()
+    intro = models.TextField()
+    body = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+
+# by default it will order by id but now we update by the recent date automatically
+
+
+    class Meta:
+        ordering = ['-date_added']
+
+
+class Comments(models.Model):
+    post = models.ForeignKey(
+        Post, related_name='comments', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    body = models.TextField()
+    date_added = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date_added']

@@ -18,9 +18,11 @@ import sys
 from subprocess import run, PIPE
 from django.http import HttpResponseRedirect
 from .models import contactEnquiry
-
+from .models import Post
+from .forms import CommentForm
 
 # Create your views here.
+
 
 def home(request):
     categories = Category.objects.filter(is_active=True, is_featured=True)[:3]
@@ -200,6 +202,7 @@ def minus_cart(request, cart_id):
     return redirect('store:cart')
 
 
+<<<<<<< HEAD
 # @login_required
 # def checkout(request):
 #     user = request.user
@@ -215,6 +218,22 @@ def minus_cart(request, cart_id):
 #         # And Deleting from Cart
 #         c.delete()
 #     return HttpResponse("<h1> Thank you for your purchase</h1>")
+=======
+def checkout(request):
+    user = request.user
+    address_id = request.GET.get('address')
+
+    address = get_object_or_404(Address, id=address_id)
+    # Get all the products of User in Cart
+    cart = Cart.objects.filter(user=user)
+    for c in cart:
+        # Saving all the products from Cart to Order
+        Order(user=user, address=address,
+              product=c.product, quantity=c.quantity).save()
+        # And Deleting from Cart
+        c.delete()
+    return JsonResponse("Thabk you for the purchase at Amogle !!", safe=False)
+>>>>>>> 29cc043dc844990bd62c6ec1124a253860fa1b8a
 
 
 @login_required
@@ -246,8 +265,10 @@ def shop(request):
 def test(request):
     return render(request, 'store/test.html')
 
+
 def chkout(request):
     user = request.user
+<<<<<<< HEAD
     if request.method == "POST":
         form = contactEnquiry()
         name = request.POST.get('name')
@@ -267,11 +288,16 @@ def chkout(request):
     amount = decimal.Decimal(0)
     shipping_amount = decimal.Decimal(10)
     # using list comprehension to calculate total amount based on quantity and shipping
+=======
+    amount = decimal.Decimal(0)
+    shipping_amount = decimal.Decimal(10)
+>>>>>>> 29cc043dc844990bd62c6ec1124a253860fa1b8a
     cp = [p for p in Cart.objects.all() if p.user == user]
     if cp:
         for p in cp:
             temp_amount = (p.quantity * p.product.price)
             amount += temp_amount
+<<<<<<< HEAD
     
     context = {
         
@@ -281,6 +307,16 @@ def chkout(request):
         'addresses': addresses,
     }
     return render(request, 'store/chkout.html',context)
+=======
+
+    context = {
+        'amount': amount,
+        'shipping_amount': shipping_amount,
+        'total_amount': amount + shipping_amount,
+    }
+
+    return render(request, 'store/chkout.html', context)
+>>>>>>> 29cc043dc844990bd62c6ec1124a253860fa1b8a
 
 
 @csrf_exempt
@@ -314,3 +350,36 @@ def verify_payment(request):
     pp.pprint(response_data)
 
     return JsonResponse(f"Payment Done !! With IDX. {response_data['user']['idx']}", safe=False)
+
+
+def simple_function(request):
+    inp = request.POST.get('param')
+
+    out = run([sys.executable,
+              '//script.py//', inp], shell=False, stout=PIPE)
+    print(out)
+    return render(request, 'index.html')
+
+
+def blog(request):
+    posts = Post.objects.all()
+    return render(request, "main/blog.html", {"posts": posts})
+
+
+def post_detail(request, slug):
+    post = Post.objects.get(slug=slug)
+
+    if request.method == 'POST':  # using if conditions to update the page if new commnets are submitted
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+
+            return redirect('post_detail', slug=post.slug)
+            # return HttpResponseRedirect("/registered")
+    else:
+        form = CommentForm()
+
+    return render(request, "main/post_detail.html", {'post': post, 'form': form, })

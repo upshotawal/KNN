@@ -1,5 +1,5 @@
 from django.contrib.auth import password_validation
-from store.models import Address, Comments, contactEnquiry
+from store.models import Address
 from django import forms
 import django
 from django.contrib.auth.models import User
@@ -64,17 +64,3 @@ class SetPasswordForm(SetPasswordForm):
         attrs={'autocomplete': 'new-password', 'class': 'form-control'}))
 
 
-<<<<<<< HEAD
-
-=======
-class UserInfo(forms.ModelForm):
-    class Meta:
-        model = contactEnquiry
-        fields = ['fname', 'lname', 'email', 'phone']
-
-
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comments
-        fields = ['name', 'email', 'body']
->>>>>>> 29cc043dc844990bd62c6ec1124a253860fa1b8a

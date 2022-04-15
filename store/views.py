@@ -18,8 +18,7 @@ import sys
 from subprocess import run, PIPE
 from django.http import HttpResponseRedirect
 from .models import contactEnquiry
-from .models import Post
-from .forms import CommentForm
+
 
 # Create your views here.
 
@@ -202,7 +201,6 @@ def minus_cart(request, cart_id):
     return redirect('store:cart')
 
 
-<<<<<<< HEAD
 # @login_required
 # def checkout(request):
 #     user = request.user
@@ -218,22 +216,6 @@ def minus_cart(request, cart_id):
 #         # And Deleting from Cart
 #         c.delete()
 #     return HttpResponse("<h1> Thank you for your purchase</h1>")
-=======
-def checkout(request):
-    user = request.user
-    address_id = request.GET.get('address')
-
-    address = get_object_or_404(Address, id=address_id)
-    # Get all the products of User in Cart
-    cart = Cart.objects.filter(user=user)
-    for c in cart:
-        # Saving all the products from Cart to Order
-        Order(user=user, address=address,
-              product=c.product, quantity=c.quantity).save()
-        # And Deleting from Cart
-        c.delete()
-    return JsonResponse("Thabk you for the purchase at Amogle !!", safe=False)
->>>>>>> 29cc043dc844990bd62c6ec1124a253860fa1b8a
 
 
 @login_required
@@ -268,7 +250,6 @@ def test(request):
 
 def chkout(request):
     user = request.user
-<<<<<<< HEAD
     if request.method == "POST":
         form = contactEnquiry()
         name = request.POST.get('name')
@@ -288,16 +269,11 @@ def chkout(request):
     amount = decimal.Decimal(0)
     shipping_amount = decimal.Decimal(10)
     # using list comprehension to calculate total amount based on quantity and shipping
-=======
-    amount = decimal.Decimal(0)
-    shipping_amount = decimal.Decimal(10)
->>>>>>> 29cc043dc844990bd62c6ec1124a253860fa1b8a
     cp = [p for p in Cart.objects.all() if p.user == user]
     if cp:
         for p in cp:
             temp_amount = (p.quantity * p.product.price)
             amount += temp_amount
-<<<<<<< HEAD
     
     context = {
         
@@ -307,16 +283,6 @@ def chkout(request):
         'addresses': addresses,
     }
     return render(request, 'store/chkout.html',context)
-=======
-
-    context = {
-        'amount': amount,
-        'shipping_amount': shipping_amount,
-        'total_amount': amount + shipping_amount,
-    }
-
-    return render(request, 'store/chkout.html', context)
->>>>>>> 29cc043dc844990bd62c6ec1124a253860fa1b8a
 
 
 @csrf_exempt

@@ -18,15 +18,6 @@ urlpatterns = [
 #     path('checkout/', views.checkout, name="checkout"),
     path('chkout/', views.chkout, name="chkout"),
     path('orders/', views.orders, name="orders"),
-<<<<<<< HEAD
-=======
-    #     path("saveenquiry", views.saveEnquiry, name="saveenquiry"),
-    path("userinfo", views.UserInfo, name="userinfo"),
-    path("simple_function", views.simple_function),
-    path("blog/", views.blog, name="blog"),
-    # using slug insted of id to path
-    path('blog/<slug:slug>/', views.post_detail, name="post_detail"),
->>>>>>> 29cc043dc844990bd62c6ec1124a253860fa1b8a
 
     # URL for Products
     path('product/<slug:slug>/', views.detail, name="product-detail"),
@@ -61,7 +52,7 @@ urlpatterns = [
         template_name='account/password_reset_complete.html'), name="password_reset_complete"),
 
     path('product/test/', views.test, name="test"),
-    path('api/verify_payment', views.verify_payment, name='verify_payment'),
+    path('api/verify_payment', views.verify_payment, name='verify_payment')
 
 
 ]

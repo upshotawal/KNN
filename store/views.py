@@ -324,27 +324,27 @@ def simple_function(request):
     return render(request, 'index.html')
 
 
+@login_required
 def blog(request):
     blogs = Blog.objects.all()[:6]
     return render(request, "store/blog.html", {"blogs": blogs})
 
 
+@login_required
 def post_detail(request, slug):
-    post = Blog.objects.get(slug=slug)
-           # using if conditions to update the page if new commnets are submitted
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
+    post = get_object_or_404(Blog, slug=slug)
 
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.save()
+    # if request.method == 'POST':
+    #     form = ReviewForm(request.POST)
 
-            return redirect('post_detail', slug=post.slug)
+    #     if form.is_valid():
+    #         comment = form.save(commit=False)
+    #         comment.post = post
+    #         comment.save()
 
-    else:
-        form = ReviewForm()
-    return render(request, "store/post_detail.html", {'post': post, 'form': form})
+    #         return redirect('post_detail', slug=post.slug)
 
-# def post_detail(request):
-#     return render(request, "store/post_detail.html")
+    # else:
+    #     form = ReviewForm()
+
+    return render(request, 'store/post_detail.html', {'post': post, })

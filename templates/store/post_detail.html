@@ -11,28 +11,29 @@
 
 {% block content%}
 
-
+{% for post in posts %}
 <div class="container">
 <div class="col-md-8 col-md-offset-2 col-xs-12">
     <div class="mainheading">
 
-        <h1 class="posttitle">{{review.blog.title}}</h1>
+        <h1 class="posttitle">{{post.blog.title}}</h1>
 
     </div>
 
     <!-- Begin Featured Image -->
-    <img class="featured-image img-fluid" src="assets/img/demopic/10.jpg" alt="">
+    <img class="featured-image img-fluid" src={{post.blog.image.url}} alt="">
     <!-- End Featured Image -->
 
     <!-- Begin Post Content -->
     <div class="article-post">
         <p>
-           {{blog.description}}
+           {{post.blog.description}}
         </p>
         
     </div>
 </div>
 </div>
+{% endfor %}
 <div class="container">
 <h2 class="subtitle">Comments</h2>
 

@@ -21,7 +21,6 @@ urlpatterns = [
 
     # url for blog
     path('blog/', views.blog, name="blog"),
-    path('post_detail/', views.post_detail, name="post-detail"),
     path('blog/<slug:slug>/', views.post_detail, name="post-detail"),
 
     # URL for Products

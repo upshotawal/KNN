@@ -1,0 +1,118 @@
+{% load static %}
+{% include 'navbar.html' %}
+
+{% block extralinks %}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/mediumish.css' %}">
+
+{% endblock  %}
+
+
+{% block content%}
+
+
+<div class="container">
+<div class="col-md-8 col-md-offset-2 col-xs-12">
+    <div class="mainheading">
+
+        <h1 class="posttitle">{{review.blog.title}}</h1>
+
+    </div>
+
+    <!-- Begin Featured Image -->
+    <img class="featured-image img-fluid" src="assets/img/demopic/10.jpg" alt="">
+    <!-- End Featured Image -->
+
+    <!-- Begin Post Content -->
+    <div class="article-post">
+        <p>
+           {{blog.description}}
+        </p>
+        
+    </div>
+</div>
+</div>
+<div class="container">
+<h2 class="subtitle">Comments</h2>
+
+    {% for comment in post.comments.all %}
+    <article class="media ">
+        <div class="media-content">
+            <div class="content">
+                <p>
+                    <strong>{{ comment.name }}</strong> <small>{{ comment.date_added }}</small>
+                    <br> {{ comment.body }}
+                </p>
+            </div>
+        </div>
+    </article>
+    {% empty %}
+    <div class="notification">
+        <p>No comments yet!</p>
+    </div>
+    {% endfor %}
+
+
+
+    <h2 class="subtitle">Add comment</h2>
+
+    <form method="post" action=".">
+        {% csrf_token %} {{ form.as_p }}
+
+        <div class="field">
+            <div class="control">
+                <button class="button is-success btn btn-primary btn-lg">Submit</button>
+            </div>
+        </div>
+    </form> 
+</div>
+
+
+<div class="container">
+	
+<section class="recent-posts">
+	<div class="section-title">
+		<h2><span>All Stories</span></h2>
+	</div>
+	<div class="card-columns listrecent">
+		<div class = "row">
+		<!-- begin post -->
+		{% for blog in blogs %}
+		<div class="card">
+			<a href="#">
+				<img class="img-fluid" src="{{blog.images.url}}" alt="">
+			</a>
+			<div class="card-block">
+				<h2 class="card-title"><a href="#">{{blog.title}}</a></h2>
+				<h4 class="card-text">{{blog.shdescription}}</h4>
+				<div class="metafooter">
+					<div class="wrapfooter">
+						<span class="meta-footer-thumb">
+						<a href="#"><img class="author-thumb" src="{% static 'img/user.jpg' %}" alt=""></a>
+						</span>
+						<span class="author-meta">
+						<span class="post-name"><a href="#">{{user.username}}</a></span><br/>
+						<span class="post-date">{{blog.date}}</span>
+						</span>
+						<span class="post-read-more"><a href="#" title="Read Story"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		</div>
+    </div>
+</section>
+</div>
+
+
+{% endblock content %}
+
+{% block extrajs %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/mediumish.js' %}"></script>
+{% endblock extrajs %}

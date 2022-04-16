@@ -9,7 +9,7 @@ from django.db.models import fields
 from django.forms import widgets
 from django.forms.fields import CharField
 from django.utils.translation import gettext, gettext_lazy as _
-from store.models import contactEnquiry
+from store.models import *
 
 
 class RegistrationForm(UserCreationForm):
@@ -64,3 +64,7 @@ class SetPasswordForm(SetPasswordForm):
         attrs={'autocomplete': 'new-password', 'class': 'form-control'}))
 
 
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['name', 'email', 'body']

@@ -15,9 +15,14 @@ urlpatterns = [
     path('plus-cart/<int:cart_id>/', views.plus_cart, name="plus-cart"),
     path('minus-cart/<int:cart_id>/', views.minus_cart, name="minus-cart"),
     path('cart/', views.cart, name="cart"),
-#     path('checkout/', views.checkout, name="checkout"),
+    #     path('checkout/', views.checkout, name="checkout"),
     path('chkout/', views.chkout, name="chkout"),
     path('orders/', views.orders, name="orders"),
+
+    # url for blog
+    path('blog/', views.blog, name="blog"),
+    path('post_detail/', views.post_detail, name="post-detail"),
+    path('blog/<slug:slug>/', views.post_detail, name="post-detail"),
 
     # URL for Products
     path('product/<slug:slug>/', views.detail, name="product-detail"),

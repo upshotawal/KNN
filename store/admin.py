@@ -1,6 +1,6 @@
 from xml.etree.ElementTree import Comment
 from django.contrib import admin
-from .models import Address, Category, Product, Cart, Order, contactEnquiry
+from .models import *
 
 # Register your models here.
 
@@ -54,3 +54,5 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(contactEnquiry)
+admin.site.register(Blog)
+admin.site.register(Review)

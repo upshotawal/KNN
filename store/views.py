@@ -17,7 +17,8 @@ import json
 import sys
 from subprocess import run, PIPE
 from django.http import HttpResponseRedirect
-from .models import contactEnquiry
+from .models import *
+from .forms import *
 
 
 # Create your views here.
@@ -237,9 +238,6 @@ def orders(request):
     return render(request, 'store/orders.html', {'orders': all_orders})
 
 
-
-
-
 def shop(request):
     return render(request, 'store/shop.html')
 
@@ -256,13 +254,12 @@ def chkout(request):
         reciver = request.POST.get('reciver')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
-        form.name=name
-        form.reciver=reciver
-        form.email=email
-        form.phone=phone
+        form.name = name
+        form.reciver = reciver
+        form.email = email
+        form.phone = phone
         form.save()
         return redirect('store:profile')
-
 
     addresses = Address.objects.filter(user=user)
     # Display Total on Cart Page
@@ -274,15 +271,15 @@ def chkout(request):
         for p in cp:
             temp_amount = (p.quantity * p.product.price)
             amount += temp_amount
-    
+
     context = {
-        
+
         'amount': amount,
         'shipping_amount': shipping_amount,
         'total_amount': amount + shipping_amount,
         'addresses': addresses,
     }
-    return render(request, 'store/chkout.html',context)
+    return render(request, 'store/chkout.html', context)
 
 
 @csrf_exempt
@@ -328,15 +325,15 @@ def simple_function(request):
 
 
 def blog(request):
-    posts = Post.objects.all()
-    return render(request, "main/blog.html", {"posts": posts})
+    blogs = Blog.objects.all()[:6]
+    return render(request, "store/blog.html", {"blogs": blogs})
 
 
 def post_detail(request, slug):
-    post = Post.objects.get(slug=slug)
-
-    if request.method == 'POST':  # using if conditions to update the page if new commnets are submitted
-        form = CommentForm(request.POST)
+    post = Blog.objects.get(slug=slug)
+           # using if conditions to update the page if new commnets are submitted
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
 
         if form.is_valid():
             comment = form.save(commit=False)
@@ -344,8 +341,10 @@ def post_detail(request, slug):
             comment.save()
 
             return redirect('post_detail', slug=post.slug)
-            # return HttpResponseRedirect("/registered")
-    else:
-        form = CommentForm()
 
-    return render(request, "main/post_detail.html", {'post': post, 'form': form, })
+    else:
+        form = ReviewForm()
+    return render(request, "store/post_detail.html", {'post': post, 'form': form})
+
+# def post_detail(request):
+#     return render(request, "store/post_detail.html")

@@ -259,7 +259,7 @@ def chkout(request):
         form.email = email
         form.phone = phone
         form.save()
-        return redirect('store:profile')
+        return redirect('store:orders')
 
     addresses = Address.objects.filter(user=user)
     # Display Total on Cart Page
@@ -334,17 +334,17 @@ def blog(request):
 def post_detail(request, slug):
     post = get_object_or_404(Blog, slug=slug)
 
-    # if request.method == 'POST':
-    #     form = ReviewForm(request.POST)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
 
-    #     if form.is_valid():
-    #         comment = form.save(commit=False)
-    #         comment.post = post
-    #         comment.save()
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
 
-    #         return redirect('post_detail', slug=post.slug)
+            return redirect('post_detail', slug=post.slug)
 
-    # else:
-    #     form = ReviewForm()
+    else:
+        form = ReviewForm()
 
     return render(request, 'store/post_detail.html', {'post': post, })

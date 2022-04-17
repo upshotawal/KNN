@@ -216,23 +216,11 @@ def minus_cart(request, cart_id):
 #               product=c.product, quantity=c.quantity).save()
 #         # And Deleting from Cart
 #         c.delete()
-#     return HttpResponse("<h1> Thank you for your purchase</h1>")
+#     return redirect('store:orders')
 
 
 @login_required
 def orders(request):
-    # user = request.user
-    # address_id = request.GET.get('address')
-
-    # address = get_object_or_404(Address, id=address_id)
-    # # Get all the products of User in Cart
-    # cart = Cart.objects.filter(user=user)
-    # for c in cart:
-    #     # Saving all the products from Cart to Order
-    #     Order(user=user, address=address,
-    #           product=c.product, quantity=c.quantity).save()
-    #     # And Deleting from Cart
-    #     c.delete()
     all_orders = Order.objects.filter(
         user=request.user).order_by('-ordered_date')
     return render(request, 'store/orders.html', {'orders': all_orders})

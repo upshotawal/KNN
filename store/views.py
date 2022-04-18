@@ -202,21 +202,18 @@ def minus_cart(request, cart_id):
     return redirect('store:cart')
 
 
-# @login_required
-# def checkout(request):
-#     user = request.user
-#     address_id = request.GET.get('address')
+@login_required
+def checkout(request):
+    user = request.user
+    address_id = request.GET.get('address')
+    address = get_object_or_404(Address, id=address_id)
 
-#     address = get_object_or_404(Address, id=address_id)
-#     # Get all the products of User in Cart
-#     cart = Cart.objects.filter(user=user)
-#     for c in cart:
-#         # Saving all the products from Cart to Order
-#         Order(user=user, address=address,
-#               product=c.product, quantity=c.quantity).save()
-#         # And Deleting from Cart
-#         c.delete()
-#     return redirect('store:orders')
+    cart = Cart.objects.filter(user=user)
+    for c in cart:
+        Order(user=user, address=address,
+              product=c.product, quantity=c.quantity).save()
+        c.delete()
+    return redirect('store:orders')
 
 
 @login_required
@@ -250,10 +247,8 @@ def chkout(request):
         return redirect('store:orders')
 
     addresses = Address.objects.filter(user=user)
-    # Display Total on Cart Page
     amount = decimal.Decimal(0)
     shipping_amount = decimal.Decimal(10)
-    # using list comprehension to calculate total amount based on quantity and shipping
     cp = [p for p in Cart.objects.all() if p.user == user]
     if cp:
         for p in cp:
@@ -336,3 +331,84 @@ def post_detail(request, slug):
         form = ReviewForm()
 
     return render(request, 'store/post_detail.html', {'post': post, })
+
+
+def product_details(request, id):
+    '''
+    this function based view shows the detail information of a particular product
+    '''
+    details = get_object_or_404(Product, pk=id)
+
+    # product_name = details.title
+    # obj_list = []
+    # print(product_name)
+    # try:
+    #     products = recommendation(product_name)
+    #     print(products)
+    #     for i in products:
+    #         obj = products.objects.get(title = i)
+    #         obj_list.append(obj)
+
+    # except:
+    #     print("something went wrong")
+
+    headers = {
+        'content-type': "multipart/form-data",
+        'cache-control': "no-cache",
+    }
+
+    recommend = None
+    obj_list = []
+    product_name = details.title
+    print(product_name)
+    if product_name:
+        url = "http://127.0.0.1:5000/get_recommendation"
+        payload = {'product_name': product_name}
+        responses = requests.request("POST", url, data=payload)
+        print(responses)  # got 200 response, OK
+
+        response = json.loads(responses.text)
+
+        print(response)  # got the response from flask api
+
+        # store the values to tuple, making it unique
+        value = tuple(response.values())
+        print(value)  # print the individual product's values got from flask
+
+        for x in value:
+            try:
+                '''
+                    filtering the products database by product title, with respect to
+                    the obtained flask recommendation api. 
+                '''
+                recommend = Product.objects.get(title=x)
+                obj_list.append(recommend)  # append to a empty list
+            except:
+                pass
+
+    # capture the dateandtime for recently viewed products
+    details.recently_viewed = datetime.now()
+    details.save()
+
+    # check if the particular product is saved by a user or not
+    fav = bool
+
+    if details.favourites.filter(id=request.user.id).exists():
+        fav = True
+
+     # Get the reviews
+    # reviews = Rating.objects.filter(product_id=id)
+
+    # tags = details.tags.split('#')
+    # ingredients = details.ingredients.split('#')
+    # instructions = details.instructions.split('#')
+    # categories = details.tags.split("#")
+    # return render(request, 'store/product_details.html', {'details': details,
+    #                                                       'ingredients': ingredients,
+    #                                                       'instructions': instructions,
+    #                                                       'categories': categories,
+    #                                                       'tags': tags,
+    #                                                       'fav': fav,
+    #                                                       'reviews': reviews,
+    #                                                       'recommendated': obj_list
+    #                                                       })

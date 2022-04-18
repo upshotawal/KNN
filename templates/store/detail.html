@@ -11,7 +11,7 @@
               <div class="row m-sm-0">
                 
                 <div class="col-sm-12 order-1 order-sm-2">
-                  <div class="owl-carousel product-slider" data-slider-id="1">
+                  <div class="container">
                     {% if product.product_image %}
                       <a class="d-block" href="{{product.product_image.url}}" data-lightbox="product" title="{{product.title}}"><img class="img-fluid" src="{{product.product_image.url}}" alt="{{product.title}}"></a>
                       {% else %}
@@ -36,7 +36,7 @@
 
               <div class="row align-items-stretch mb-4">
                 
-                  <div class="col-sm-5 pr-sm-0">
+                <div class="col-sm-5 pr-sm-0">
                   <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
                     <div class="quantity">
                       <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>

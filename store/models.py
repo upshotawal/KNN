@@ -142,7 +142,7 @@ class Blog(models.Model):
     date = models.DateTimeField(
         auto_now_add=True, verbose_name="Date")
     image = models.ImageField(
-        upload_to='product', blank=True, null=True, verbose_name="Product Image")
+        upload_to='Blog', blank=True, null=True, verbose_name="Blog Image")
 
     shdescription = models.CharField(max_length=250)
     description = models.CharField(max_length=1000)

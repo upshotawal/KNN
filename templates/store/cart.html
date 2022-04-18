@@ -103,21 +103,13 @@
                         class="dec-btn p-0 ml-2"
                         ><i class="fas fa-minus"></i
                       ></a>
-                      {% comment %}
-                      <button class="dec-btn p-0">
-                        <i class="fas fa-caret-left"></i>
-                      </button>
-                      {% endcomment %}
+                     
                       <input
                         class="form-control form-control-sm border-0 shadow-0 p-0"
                         type="text"
                         value="{{cart_product.quantity}}"
                       />
-                      {% comment %}
-                      <button class="inc-btn p-0">
-                        <i class="fas fa-caret-right"></i>
-                      </button>
-                      {% endcomment %}
+                     
                       <a
                         href="{% url 'store:plus-cart' cart_product.id %}"
                         class="inc-btn p-0"
@@ -190,26 +182,12 @@
                 ><span>${{total_amount|intcomma}}</span>
               </li>
               <li>
-                {% comment %}
-                <form action="#">
-                  <div class="form-group mb-0">
-                    <input
-                      class="form-control"
-                      type="text"
-                      placeholder="Enter your coupon"
-                    />
-                    <button class="btn btn-dark btn-sm btn-block" type="submit">
-                      <i class="fas fa-gift mr-2"></i>Apply coupon
-                    </button>
-                  </div>
-                </form>
-                {% endcomment %}
               </li>
             </ul>
 
             <h5 class="text-uppercase my-5">Select Shipping Address</h5>
 
-            <form action="{% url 'store:chkout' %}" id="myform">
+            <form action="{% url 'store:checkout' %}" id="myform">
               {% if addresses %} {% for address in addresses %}
               <div class="mb-3">
                 <input type="radio" name="address" value="{{address.id}}" />
@@ -226,7 +204,7 @@
             </br>
 
               {% comment %} For Cash on Delivery {% endcomment %}
-              <a class="btn btn-outline-dark btn-sm" href="{% url 'store:chkout' %}"
+              <a class="btn btn-outline-dark btn-sm" href="{% url 'store:checkout' %}"
               >Cash on Delivery</a>
             </form>
           </div>

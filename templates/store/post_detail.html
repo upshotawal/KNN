@@ -11,29 +11,27 @@
 
 {% block content%}
 
-{% for post in posts %}
+
 <div class="container">
 <div class="col-md-8 col-md-offset-2 col-xs-12">
     <div class="mainheading">
 
-        <h1 class="posttitle">{{post.blog.title}}</h1>
+        <h1 class="posttitle">{{blog.title}}</h1>
 
     </div>
+    <img class="featured-image img-fluid" src={{blog.image.url}} alt="">
+   
 
-    <!-- Begin Featured Image -->
-    <img class="featured-image img-fluid" src={{post.blog.image.url}} alt="">
-    <!-- End Featured Image -->
-
-    <!-- Begin Post Content -->
     <div class="article-post">
         <p>
-           {{post.blog.description}}
+           {{blog.description}}
         </p>
         
     </div>
+    
 </div>
 </div>
-{% endfor %}
+
 <div class="container">
 <h2 class="subtitle">Comments</h2>
 
@@ -59,8 +57,8 @@
     <h2 class="subtitle">Add comment</h2>
 
     <form method="post" action=".">
-        {% csrf_token %} {{ form.as_p }}
-
+        {% csrf_token %} 
+        <textarea name="paragraph_text" cols="50" rows="10">{{ form.as_p }}</textarea>
         <div class="field">
             <div class="control">
                 <button class="button is-success btn btn-primary btn-lg">Submit</button>
@@ -70,43 +68,57 @@
 </div>
 
 
-<div class="container">
-	
-<section class="recent-posts">
-	<div class="section-title">
-		<h2><span>All Stories</span></h2>
-	</div>
-	<div class="card-columns listrecent">
-		<div class = "row">
-		<!-- begin post -->
-		{% for blog in blogs %}
-		<div class="card">
-			<a href="#">
-				<img class="img-fluid" src="{{blog.images.url}}" alt="">
-			</a>
-			<div class="card-block">
-				<h2 class="card-title"><a href="#">{{blog.title}}</a></h2>
-				<h4 class="card-text">{{blog.shdescription}}</h4>
-				<div class="metafooter">
-					<div class="wrapfooter">
-						<span class="meta-footer-thumb">
-						<a href="#"><img class="author-thumb" src="{% static 'img/user.jpg' %}" alt=""></a>
-						</span>
-						<span class="author-meta">
-						<span class="post-name"><a href="#">{{user.username}}</a></span><br/>
-						<span class="post-date">{{blog.date}}</span>
-						</span>
-						<span class="post-read-more"><a href="#" title="Read Story"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>
-					</div>
-				</div>
-			</div>
-		</div>
-		{% endfor %}
-		</div>
-    </div>
-</section>
-</div>
+<div class ='container'>
 
+    <section class="featured-posts">
+        <div class="section-title">
+            <h2><span>Other Blogs</span></h2>
+        </div>
+        <div class="card-columns listfeaturedtag">
+            <div class ="row ">
+            
+                <div class="container">	
+            <!-- begin post -->
+            {% for blog in related_blog %}
+            
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-5 wrapthumbnail">
+                        <a href="{% url 'store:post-detail' blog.slug %}">
+                            <div class="thumbnail" style="{{blog.image.url}}">
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-block">
+                            <h2 class="card-title"><a href="{% url 'store:post-detail' blog.slug %}"">{{blog.title}}</a></h2>
+                            <h4 class="card-text">{{blog.shdescription}}</h4>
+                            <div class="metafooter">
+                                <div class="wrapfooter">
+                                    <span class="meta-footer-thumb">
+                                    <a href="#"><img class="author-thumb" src="{% static 'img/user.jpg' %}" alt=""></a>
+                                    </span>
+                                    <span class="author-meta">
+                                    <span class="post-name"><a href="{% url 'store:post-detail' blog.slug %}">{{user.username}}</a></span><br/>
+                                    <span class="post-date">{{blog.date}}</span>
+                                    </span>
+                                    <span class="post-read-more"><a href="{% url 'store:post-detail' blog.slug %}"" title="Read Story"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            {% endfor %}
+        
+        </div>
+        
+    
+        </div>
+    </section>
+    </div>
+    </div>
 
 {% endblock content %}
 

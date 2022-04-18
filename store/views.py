@@ -213,7 +213,7 @@ def checkout(request):
         Order(user=user, address=address,
               product=c.product, quantity=c.quantity).save()
         c.delete()
-    return redirect('store:orders')
+    return redirect('store:chkout')
 
 
 @login_required
@@ -316,6 +316,7 @@ def blog(request):
 @login_required
 def post_detail(request, slug):
     post = get_object_or_404(Blog, slug=slug)
+    related_blog = Blog.objects.exclude(title=post.title)
 
     if request.method == 'POST':
         form = ReviewForm(request.POST)
@@ -330,7 +331,7 @@ def post_detail(request, slug):
     else:
         form = ReviewForm()
 
-    return render(request, 'store/post_detail.html', {'post': post, })
+    return render(request, 'store/post_detail.html', {'post': post, 'related_blog': related_blog})
 
 
 def product_details(request, id):
@@ -396,7 +397,7 @@ def product_details(request, id):
     if details.favourites.filter(id=request.user.id).exists():
         fav = True
 
-     # Get the reviews
+    #  # Get the reviews
     # reviews = Rating.objects.filter(product_id=id)
 
     # tags = details.tags.split('#')

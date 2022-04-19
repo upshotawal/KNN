@@ -213,7 +213,7 @@ def checkout(request):
         Order(user=user, address=address,
               product=c.product, quantity=c.quantity).save()
         c.delete()
-    return redirect('store:chkout')
+    return redirect('store:orders')
 
 
 @login_required
@@ -244,7 +244,7 @@ def chkout(request):
         form.email = email
         form.phone = phone
         form.save()
-        return redirect('store:orders')
+        return redirect('store:checkout')
 
     addresses = Address.objects.filter(user=user)
     amount = decimal.Decimal(0)

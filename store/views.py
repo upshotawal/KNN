@@ -19,6 +19,11 @@ from subprocess import run, PIPE
 from django.http import HttpResponseRedirect
 from .models import *
 from .forms import *
+from django.template.loader import render_to_string, get_template
+from django.core.mail import EmailMessage, send_mail
+from django.conf import settings
+from django.template import Context
+from django.views.generic import ListView
 
 
 # Create your views here.
@@ -264,6 +269,8 @@ def chkout(request):
     }
     return render(request, 'store/chkout.html', context)
 
+# fro payment API
+
 
 @csrf_exempt
 def verify_payment(request):
@@ -298,15 +305,6 @@ def verify_payment(request):
     return JsonResponse(f"Payment Done !! With IDX. {response_data['user']['idx']}", safe=False)
 
 
-def simple_function(request):
-    inp = request.POST.get('param')
-
-    out = run([sys.executable,
-              '//script.py//', inp], shell=False, stout=PIPE)
-    print(out)
-    return render(request, 'index.html')
-
-
 @login_required
 def blog(request):
     blogs = Blog.objects.all()[:6]
@@ -333,6 +331,8 @@ def post_detail(request, slug):
 
     return render(request, 'store/post_detail.html', {'post': post, 'related_blog': related_blog})
 
+
+# recommendation part
 
 def product_details(request, id):
     '''
@@ -413,3 +413,32 @@ def product_details(request, id):
     #                                                       'reviews': reviews,
     #                                                       'recommendated': obj_list
     #                                                       })
+
+
+# for Email API
+
+def contact(request):
+    username = None
+    if request.user.is_authenticated():
+        username = request.user.username
+        useremail = request.user.email
+        if request.method == "POST":
+            message_name = username
+            message_email = useremail
+            message = 'hello help me'
+
+            send_mail(
+                'message from' + message_name,
+                message,
+                message_email,
+                ['fypusphot@gmail.com', 'awalupshot@gmail.com'],
+            )
+            return render(request, 'contact.html', {'message_name': message_name})
+        else:
+            return render(request, 'contact.html')
+
+
+# def external(request):
+#     out = run([sys.executable, '/script.py'], shell=False, stdout=PIPE)
+#     print(out)
+#     return render(request, 'store/index.html', {'data1': out.stdout})

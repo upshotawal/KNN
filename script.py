@@ -107,6 +107,6 @@ def create_message_with_attachment(
 if __name__ == "__main__":
     service = get_service()
     user_id = 'me'
-    msg = create_message_with_attachment('awalupshot@gmail.com', 'realm3777@gmail.com',
+    msg = create_message_with_attachment('awalupshot@gmail.com', 'rishab15manutd@gmail.com',
                                          'From Amogle', 'Thank you for purchasing our Products and if we need to contact us read this form page', './sample.txt')
     send_message(service, user_id, msg)

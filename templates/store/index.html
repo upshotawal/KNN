@@ -156,11 +156,15 @@
                 <p class="text-small text-muted mb-0">Contack Our E-mail For Whatever You Need.</p>
               </div>
               <div class="col-lg-6">
-                <form action="/simple_function">
+                {% comment %} <form action="{% url 'store:get_service' %}"> {% endcomment %}
+                  <form action="{% url 'store:contact' %}" method='POST'>
+                    {% csrf_token %}
                   <div class="input-group flex-column flex-sm-row mb-3">
-                    <input class="form-control form-control-lg py-3" type="email" placeholder="Enter your email address" aria-describedby="button-addon2">
+                    <input class="form-control form-control-lg py-3" type="email" placeholder='enter your email' value ={{user.email}} aria-describedby="button-addon2">
                     <div class="input-group-append">
-                      <button class="btn btn-dark btn-block" id="button-addon2" type="submit">Subscribe</button>
+                      
+                      <button class="btn btn-dark btn-block" id="button-addon2" type="submit">Contact</button>
+                      
                     </div>
                   </div>
                 </form>
@@ -170,4 +174,4 @@
         </section>
       </div>
 
-      {% endblock content %}
+    {% endblock content %}

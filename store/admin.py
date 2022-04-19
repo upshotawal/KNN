@@ -13,23 +13,21 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'category_image',
+    list_display = ('title', 'category_image',
                     'is_active', 'is_featured', 'updated_at')
-    list_editable = ('slug', 'is_active', 'is_featured')
+    list_editable = ('is_active', 'is_featured')
     list_filter = ('is_active', 'is_featured')
     list_per_page = 10
     search_fields = ('title', 'description')
-    prepopulated_fields = {"slug": ("title", )}
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'category', 'product_image',
+    list_display = ('title',  'category', 'product_image',
                     'is_active', 'is_featured', 'updated_at')
-    list_editable = ('slug', 'category', 'is_active', 'is_featured')
+    list_editable = ('category', 'is_active', 'is_featured')
     list_filter = ('category', 'is_active', 'is_featured')
     list_per_page = 10
     search_fields = ('title', 'category', 'short_description')
-    prepopulated_fields = {"slug": ("title", )}
 
 
 class CartAdmin(admin.ModelAdmin):

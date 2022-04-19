@@ -2,6 +2,8 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from zmq import DEALER
+from django.db.models import CharField, Model
+from autoslug import AutoSlugField
 
 # Create your models here.
 
@@ -20,7 +22,8 @@ class Address(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=50, verbose_name="Category Title")
-    slug = models.SlugField(max_length=55, verbose_name="Category Slug")
+    slug = AutoSlugField(populate_from='title', unique=True,
+                         verbose_name="Category Slug")
     description = models.TextField(
         blank=True, verbose_name="Category Description")
     category_image = models.ImageField(
@@ -42,7 +45,8 @@ class Category(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=150, verbose_name="Product Title")
-    slug = models.SlugField(max_length=160, verbose_name="Product Slug")
+    slug = AutoSlugField(populate_from='title', unique=True,
+                         verbose_name="Product Slug")
     sku = models.CharField(max_length=255, unique=True,
                            verbose_name="Unique Product ID (SKU)")
     short_description = models.TextField(verbose_name="Short Description")
@@ -138,7 +142,7 @@ class Blog(models.Model):
     user = models.ForeignKey(User, verbose_name="User",
                              on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=160)
+    slug = AutoSlugField(populate_from='title', unique=True)
     date = models.DateTimeField(
         auto_now_add=True, verbose_name="Date")
     image = models.ImageField(

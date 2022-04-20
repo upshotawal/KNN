@@ -13,7 +13,7 @@
                 <div class="col-sm-12 order-1 order-sm-2">
                   <div class="container">
                     {% if product.product_image %}
-                      <a class="d-block" href="{{product.product_image.url}}" data-lightbox="product" title="{{product.title}}"><img class="img-fluid" src="{{product.product_image.url}}" alt="{{product.title}}"></a>
+                      <a class="d-block" href="{{product.product_image.url}}" data-lightbox="product" title="{{product.title}}"><img class="img-fluid" src="{{product.product_image}}" alt="{{product.title}}"></a>
                       {% else %}
                       <a class="d-block" href="{% static 'img/product-detail-1.jpg' %}" data-lightbox="product" title="{{product.title}}"><img class="img-fluid" src="{% static 'img/product-detail-1.jpg' %}" alt="{{product.title}}"></a>
                     {% endif %}
@@ -114,6 +114,7 @@
             </div>
           </div>
 
+          
 
           <!-- RELATED PRODUCTS-->
           <h2 class="h5 text-uppercase mb-4">Related products</h2>
@@ -128,7 +129,7 @@
                     <div class="d-block mb-3 position-relative">
                       <a class="d-block" href="{% url 'store:product-detail' rp.slug %}">
                         {% if rp.product_image %}
-                          <img class="img-fluid w-100" src="{{rp.product_image.url}}" alt="{{rp.title}}">
+                          <img class="img-fluid w-100" src="{{rp.product_image}}" alt="{{rp.title}}">
                         {% else %}
                         <img class="img-fluid w-100" src="{% static 'img/product-1.jpg' %}" alt="{{rp.title}}">
                         {% endif %}
@@ -148,6 +149,36 @@
 
               {% endfor %}
             {% endif %}
+              </br>
+            <div class='container'>
+          <h2 class="h5 text-uppercase mb-4">Related products</h2>
+          <div class="row">
+            {% for x in recommendated %}
+            <div class="col-lg-3 col-sm-6">
+              <div class="product text-center skel-loader">
+                <div class="d-block mb-3 position-relative">
+                  <a class="d-block" href="{% url 'store:product-detail' x.slug %}">
+                    
+                      <img class="img-fluid w-100" src="{{x.product_image}}" alt="{{rp.title}}">
+
+                  </a>
+
+                  <div class="product-overlay">
+                    <ul class="mb-0 list-inline">
+                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a></li>
+                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="{% url 'store:add-to-cart' %}">Add to cart</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <h6> <a class="reset-anchor" href="{% url 'store:product-detail' x.slug %}">{{x.title}}</a></h6>
+                <p class="small text-muted">${{x.price}}</p>
+              </div>
+            </div>
+            
+            
+            {% endfor %}
+        </div>
+
 
            
 

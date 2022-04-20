@@ -31,7 +31,7 @@ from django.views.generic import ListView
 
 def home(request):
     categories = Category.objects.filter(is_active=True, is_featured=True)[:3]
-    products = Product.objects.filter(is_active=True, is_featured=True)
+    products = Product.objects.filter(is_active=True, is_featured=True)[:6]
     context = {
         'categories': categories,
         'products': products,
@@ -43,10 +43,45 @@ def detail(request, slug):
 
     product = get_object_or_404(Product, slug=slug)
     related_products = Product.objects.exclude(id=product.id).filter(
-        is_active=True, category=product.category)
+        is_active=True, category=product.category)[:4]
+
+    headers = {
+        'content-type': "multipart/form-data",
+        'cache-control': "no-cache",
+    }
+
+    recommend = None
+    obj_list = []
+    product_name = product.title
+    print(product_name)
+    if product_name:
+        url = "http://127.0.0.1:5000/get_recommendation"
+        payload = {'product_name': product_name}
+        responses = requests.request("POST", url, data=payload)
+        print(responses)
+
+        response = json.loads(responses.text)
+
+        print(response)
+
+        value = tuple(response.values())
+        print(value)
+        for x in value:
+            try:
+                '''
+                    filtering the products database by product title, with respect to
+                    the obtained flask recommendation api. 
+                '''
+                recommend = Product.objects.get(title=x)
+                obj_list.append(recommend)
+            except:
+
+                pass
+
     context = {
         'product': product,
         'related_products': related_products,
+        'recommendated': obj_list
 
     }
     return render(request, 'store/detail.html', context)
@@ -333,86 +368,6 @@ def post_detail(request, slug):
 
 
 # recommendation part
-
-def product_details(request, id):
-    '''
-    this function based view shows the detail information of a particular product
-    '''
-    details = get_object_or_404(Product, pk=id)
-
-    # product_name = details.title
-    # obj_list = []
-    # print(product_name)
-    # try:
-    #     products = recommendation(product_name)
-    #     print(products)
-    #     for i in products:
-    #         obj = products.objects.get(title = i)
-    #         obj_list.append(obj)
-
-    # except:
-    #     print("something went wrong")
-
-    headers = {
-        'content-type': "multipart/form-data",
-        'cache-control': "no-cache",
-    }
-
-    recommend = None
-    obj_list = []
-    product_name = details.title
-    print(product_name)
-    if product_name:
-        url = "http://127.0.0.1:5000/get_recommendation"
-        payload = {'product_name': product_name}
-        responses = requests.request("POST", url, data=payload)
-        print(responses)  # got 200 response, OK
-
-        response = json.loads(responses.text)
-
-        print(response)  # got the response from flask api
-
-        # store the values to tuple, making it unique
-        value = tuple(response.values())
-        print(value)  # print the individual product's values got from flask
-
-        for x in value:
-            try:
-                '''
-                    filtering the products database by product title, with respect to
-                    the obtained flask recommendation api. 
-                '''
-                recommend = Product.objects.get(title=x)
-                obj_list.append(recommend)  # append to a empty list
-            except:
-                pass
-
-    # capture the dateandtime for recently viewed products
-    details.recently_viewed = datetime.now()
-    details.save()
-
-    # check if the particular product is saved by a user or not
-    fav = bool
-
-    if details.favourites.filter(id=request.user.id).exists():
-        fav = True
-
-    #  # Get the reviews
-    # reviews = Rating.objects.filter(product_id=id)
-
-    # tags = details.tags.split('#')
-    # ingredients = details.ingredients.split('#')
-    # instructions = details.instructions.split('#')
-    # categories = details.tags.split("#")
-    # return render(request, 'store/product_details.html', {'details': details,
-    #                                                       'ingredients': ingredients,
-    #                                                       'instructions': instructions,
-    #                                                       'categories': categories,
-    #                                                       'tags': tags,
-    #                                                       'fav': fav,
-    #                                                       'reviews': reviews,
-    #                                                       'recommendated': obj_list
-    #                                                       })
 
 
 # for Email API

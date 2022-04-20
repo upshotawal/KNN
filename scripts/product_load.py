@@ -7,13 +7,14 @@ def run():
     reader = csv.reader(fhand)
     next(reader)
 
+    Category.objects.all().delete()
+    Product.objects.all().delete()
+
     for row in reader:
         print(row)
 
-        # create for category and products
+        c, created = Category.objects.get_or_create(title=row[8])
 
-        c, created = Category.objects.get_or_create(title=row[7])
-
-        r = Product(title=row[1], sku=row[0],  short_description=row[2],
-                    product_image=row[6], price=row[3],  category=c)
+        r = Product(sku=row[1], title=row[2],  short_description=row[3], price=row[4],
+                    product_image=row[7],  category=c)
         r.save()

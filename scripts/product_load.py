@@ -7,9 +7,6 @@ def run():
     reader = csv.reader(fhand)
     next(reader)
 
-    Category.objects.all().delete()
-    Product.objects.all().delete()
-
     for row in reader:
         print(row)
 

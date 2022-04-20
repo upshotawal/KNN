@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from zmq import DEALER
 from django.db.models import CharField, Model
 from autoslug import AutoSlugField
-
+from django.db import models
+from ckeditor.fields import RichTextField
 # Create your models here.
 
 
@@ -50,7 +51,7 @@ class Product(models.Model):
                          verbose_name="Product Slug")
     sku = models.CharField(max_length=255, unique=True,
                            verbose_name="Unique Product ID (SKU)")
-    short_description = models.TextField(verbose_name="Short Description")
+    short_description = RichTextField()
     detail_description = models.TextField(
         blank=True, null=True, verbose_name="Detail Description")
     product_image = models.ImageField(
@@ -150,8 +151,8 @@ class Blog(models.Model):
     image = models.ImageField(
         upload_to='Blog', blank=True, null=True, verbose_name="Blog Image")
 
-    shdescription = models.CharField(max_length=250)
-    description = models.CharField(max_length=1000)
+    shdescription = RichTextField()
+    description = RichTextField()
 
     def __str__(self):
         return self.title
@@ -162,7 +163,7 @@ class Review(models.Model):
         Blog, related_name='comments', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     email = models.EmailField()
-    body = models.TextField()
+    body = RichTextField()
     date_added = models.DateField(auto_now_add=True)
 
     class Meta:

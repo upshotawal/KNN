@@ -31,7 +31,7 @@ from django.views.generic import ListView
 
 def home(request):
     categories = Category.objects.filter(is_active=True, is_featured=True)[:3]
-    products = Product.objects.filter(is_active=True, is_featured=True)[:6]
+    products = Product.objects.filter(is_active=True, is_featured=True)[:8]
     context = {
         'categories': categories,
         'products': products,

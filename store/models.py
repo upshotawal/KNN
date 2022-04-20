@@ -28,8 +28,9 @@ class Category(models.Model):
         blank=True, verbose_name="Category Description")
     category_image = models.ImageField(
         upload_to='category', blank=True, null=True, verbose_name="Category Image")
-    is_active = models.BooleanField(verbose_name="Is Active?")
-    is_featured = models.BooleanField(verbose_name="Is Featured?")
+    is_active = models.BooleanField(verbose_name="Is Active?", default=True)
+    is_featured = models.BooleanField(
+        verbose_name="Is Featured?", default=True)
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Created Date")
     updated_at = models.DateTimeField(
@@ -57,8 +58,9 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.ForeignKey(
         Category, verbose_name="Product Categoy", on_delete=models.CASCADE)
-    is_active = models.BooleanField(verbose_name="Is Active?")
-    is_featured = models.BooleanField(verbose_name="Is Featured?")
+    is_active = models.BooleanField(verbose_name="Is Active?", default=True)
+    is_featured = models.BooleanField(
+        verbose_name="Is Featured?", default=True)
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Created Date")
     updated_at = models.DateTimeField(

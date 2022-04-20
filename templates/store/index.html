@@ -160,7 +160,7 @@
                   <form action="{% url 'store:contact' %}" method='POST'>
                     {% csrf_token %}
                   <div class="input-group flex-column flex-sm-row mb-3">
-                    <input class="form-control form-control-lg py-3" type="email" placeholder='enter your email' value ={{user.email}} aria-describedby="button-addon2">
+                    <input class="form-control form-control-lg py-3" type="email" aria-describedby="button-addon2" placeholder='enter your email' value ={{user.email}} >
                     <div class="input-group-append">
                       
                       <button class="btn btn-dark btn-block" id="button-addon2" type="submit">Contact</button>

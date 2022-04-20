@@ -329,7 +329,7 @@ def post_detail(request, slug):
     else:
         form = ReviewForm()
 
-    return render(request, 'store/post_detail.html', {'post': post, 'related_blog': related_blog})
+    return render(request, 'store/post_detail.html', {'post': post, 'related_blog': related_blog, 'form': form})
 
 
 # recommendation part

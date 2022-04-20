@@ -1,131 +1,186 @@
+
+{% load tailwind_tags %}
 {% load static %}
-{% include 'navbar.html' %}
-
-{% block extralinks %}
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-<link rel="stylesheet" href="{% static 'css/mediumish.css' %}">
-
-{% endblock  %}
 
 
-{% block content%}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block metatitle %}Product Recommendation System{% endblock metatitle %}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+	{% tailwind_css %} 
 
 
+
+<header>
+    <nav class="navbar navbar-expand-lg shadow-md py-2 bg-white relative flex items-center w-full justify-between">
+        <div class="px-6 w-full flex flex-wrap items-center justify-between">
+          <div class="flex items-center">
+            <button
+              class="navbar-toggler border-0 py-3 lg:hidden leading-none text-xl bg-transparent text-gray-600 hover:text-gray-700 focus:text-gray-700 transition-shadow duration-150 ease-in-out mr-2"
+              type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContentY"
+              aria-controls="navbarSupportedContentY" aria-expanded="false" aria-label="Toggle navigation">
+              <svg aria-hidden="true" focusable="false" data-prefix="fas" class="w-5" role="img"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path fill="currentColor"
+                  d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z">
+                </path>
+              </svg>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse grow items-center" id="navbarSupportedContentY">
+            <ul class="navbar-nav mr-auto lg:flex lg:flex-row">
+              <li class="nav-item">
+                <a class="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out"
+                  href="{% url 'store:home' %}" data-mdb-ripple="true" data-mdb-ripple-color="light">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out"
+                  href="{% url 'store:blog' %}" data-mdb-ripple="true" data-mdb-ripple-color="light">Blog Page</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out"
+                  href="{% url 'store:all-categories' %}" data-mdb-ripple="true" data-mdb-ripple-color="light">Categories</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+</header>
+<body>
+      <!-- Navbar -->
+    <div class="w-screen h-screen bg-white flex flex-row flex-wrap p-3">
+        <div class="mx-auto w-2/3">
+      <!-- Profile Card -->
+      <div class="rounded-lg shadow-lg bg-gray-600 w-full flex flex-row flex-wrap p-3 antialiased" style="
+        background-image: url('https://images.unsplash.com/photo-1578836537282-3171d77f8632?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80');
+        background-repeat: no-repat;
+        background-size: cover;
+        background-blend-mode: multiply;
+      ">
+        <div class="md:w-1/3 w-full">
+          <img class="rounded-lg shadow-lg antialiased" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png">  
+        </div>
+        <div class="md:w-2/3 w-full px-3 flex flex-row flex-wrap">
+          <div class="w-full text-right text-gray-700 font-semibold relative pt-3 md:pt-0">
+            <div class="text-2xl text-white leading-tight">{{post.title}}</div>
+            <div class="text-normal text-gray-300 hover:text-gray-400 cursor-pointer"><span class="border-b border-dashed border-gray-500 pb-1">{{post.user}}</span></div>
+            <div class="text-sm text-gray-300 hover:text-gray-400 cursor-pointer md:absolute pt-3 md:pt-0 bottom-0 right-0">Posted : <b>{{post.date}}</b></div>
+          </div>
+        </div>
+      </div>
+      <!-- End Profile Card -->
+      <p class="text-base font-light leading-relaxed mt-0 mb-4 text-gray-800">
+        {{post.description}}
+      </p>
+
+
+
+</br>
+</br>
+
+<!-- COMMENT SECTION -->
 <div class="container">
-<div class="col-md-8 col-md-offset-2 col-xs-12">
-    <div class="mainheading">
-
-        <h1 class="posttitle">{{blog.title}}</h1>
-
-    </div>
-    <img class="featured-image img-fluid" src={{blog.image.url}} alt="">
-   
-
-    <div class="article-post">
-        <p>
-           {{blog.description}}
-        </p>
-        
-    </div>
-    
-</div>
-</div>
-
-<div class="container">
-<h2 class="subtitle">Comments</h2>
-
+    <h4 class="font-medium leading-tight text-2xl mt-0 mb-2 text-blue-600">Comments</h4>
     {% for comment in post.comments.all %}
-    <article class="media ">
-        <div class="media-content">
-            <div class="content">
-                <p>
-                    <strong>{{ comment.name }}</strong> <small>{{ comment.date_added }}</small>
-                    <br> {{ comment.body }}
-                </p>
-            </div>
-        </div>
-    </article>
-    {% empty %}
-    <div class="notification">
-        <p>No comments yet!</p>
-    </div>
-    {% endfor %}
-
-
-
-    <h2 class="subtitle">Add comment</h2>
-
-    <form method="post" action=".">
-        {% csrf_token %} 
-        <textarea name="paragraph_text" cols="50" rows="10">{{ form.as_p }}</textarea>
-        <div class="field">
-            <div class="control">
-                <button class="button is-success btn btn-primary btn-lg">Submit</button>
-            </div>
-        </div>
-    </form> 
-</div>
-
-
-<div class ='container'>
-
-    <section class="featured-posts">
-        <div class="section-title">
-            <h2><span>Other Blogs</span></h2>
-        </div>
-        <div class="card-columns listfeaturedtag">
-            <div class ="row ">
-            
-                <div class="container">	
-            <!-- begin post -->
-            {% for blog in related_blog %}
-            
-            <div class="card">
-                <div class="row">
-                    <div class="col-md-5 wrapthumbnail">
-                        <a href="{% url 'store:post-detail' blog.slug %}">
-                            <div class="thumbnail" style="{{blog.image.url}}">
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-7">
-                        <div class="card-block">
-                            <h2 class="card-title"><a href="{% url 'store:post-detail' blog.slug %}"">{{blog.title}}</a></h2>
-                            <h4 class="card-text">{{blog.shdescription}}</h4>
-                            <div class="metafooter">
-                                <div class="wrapfooter">
-                                    <span class="meta-footer-thumb">
-                                    <a href="#"><img class="author-thumb" src="{% static 'img/user.jpg' %}" alt=""></a>
-                                    </span>
-                                    <span class="author-meta">
-                                    <span class="post-name"><a href="{% url 'store:post-detail' blog.slug %}">{{user.username}}</a></span><br/>
-                                    <span class="post-date">{{blog.date}}</span>
-                                    </span>
-                                    <span class="post-read-more"><a href="{% url 'store:post-detail' blog.slug %}"" title="Read Story"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <article class="media ">
+            <div class="media-content">
+                <div class="content">
+                    <p>
+                        <strong>{{ comment.name }}</strong> <small>{{ comment.date_added }}</small>
+                        <br> {{ comment.body }}
+                    </p>
                 </div>
             </div>
-        
-            {% endfor %}
-        
+        </article>
+    </br>
+
+        {% empty %}
+        <div class="notification">
+            <p>No comments yet!</p>
         </div>
-        
+        {% endfor %}
     
+    </br>
+    <label for="comment" class="text-medium text-blue-600">Add a comment</label>
+
+    <form method ='post' action='.'>
+        {% csrf_token %} 
+        {{ form.as_table }}
+        <input type='submit' value='Add Comment'>
+    </form>
+    {% comment %} <div class="max-w-lg rounded-lg shadow-md shadow-blue-600/50">
+        <form action="" class="w-full p-4">
+          <div class="mb-2">
+            <form method="post" action=".">
+                {% csrf_token %} 
+            
+            <textarea
+              class="w-full h-20 p-2 border rounded focus:outline-none focus:ring-gray-300 focus:ring-1"
+              name="comment"
+              placeholder="">{{ form.as_p }}</textarea>
+            </form> 
+          </div>
+          <div>
+              
+            <button class="px-3 py-2 text-sm text-blue-100 bg-blue-600 rounded m-2" type ='submit'>
+              Comment
+            </button>
+        
+            <button
+              class="px-3 py-2 text-sm text-blue-600 border border-blue-500 rounded m-1">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div> {% endcomment %}
+    </div>
+<!-- COMMENT SECTION -->
+
+</br>
+</br>
+
+
+
+
+
+      <h1 class="font-medium leading-tight text-5xl mt-0 mb-2 ml-5 text-black-600">Related Posts</h1>
+
+    <div class="grid grid-cols-2 gap-4">
+    {% for blog in related_blog %}
+    <div class="flex justify-center ml-6 mt-4">
+        <div class="flex flex-col md:flex-row md:max-w-xl rounded-lg bg-white shadow-lg">
+        <img class=" w-full h-96 md:h-auto object-cover md:w-48 rounded-t-lg md:rounded-none md:rounded-l-lg"  src="{{blog.image.url}}" alt="" />
+        <div class="p-6 flex flex-col justify-start">
+            <h5 class="text-gray-900 text-xl font-medium mb-2"><a href="{% url 'store:post-detail' blog.slug %}">{{blog.title}}</a></h5>
+            <p class="text-gray-700 text-base mb-4">
+                {{blog.shdescription}}
+            </p>
+            <p class="text-gray-600 text-xs">{{blog.date}}</p>
+            <span class="meta-footer-thumb">
+                <a href="#"><img class="author-thumb" src="" alt=""></a>
+                </span>
+            <span class="author-meta">
+                <span class="post-name"><a href="{% url 'store:post-detail' blog.slug %}">{{blog.user}}</a></span><br/>
+                </span>
+            <span class="post-read-more"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>
         </div>
-    </section>
+        </div>
     </div>
+    {% endfor %}
     </div>
 
-{% endblock content %}
+        </div>
+      </div>
 
-{% block extrajs %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
-	<script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
-	<script src="{% static 'js/jquery.min.js' %}"></script>
-	<script src="{% static 'js/mediumish.js' %}"></script>
-{% endblock extrajs %}
+
+</body>
+</html>
+
+
+      
+

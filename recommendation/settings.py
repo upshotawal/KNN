@@ -51,7 +51,7 @@ MIDDLEWARE = [
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
-ROOT_URLCONF = 'jewelryshop.urls'
+ROOT_URLCONF = 'recommendation.urls'
 
 TEMPLATES = [
     {
@@ -71,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'jewelryshop.wsgi.application'
+WSGI_APPLICATION = 'recommendation.wsgi.application'
 
 
 # Database
@@ -125,7 +125,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'jewelryshop/static')]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'recommendation/static')]
 # # Automatically Created on Production
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 

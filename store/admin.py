@@ -47,6 +47,11 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('user', 'product')
 
 
+class RatingAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'product', 'rate', 'created_at']
+    readonly_fields = ['created_at']
+
+
 admin.site.register(Address, AddressAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
@@ -55,3 +60,4 @@ admin.site.register(Order, OrderAdmin)
 admin.site.register(contactEnquiry)
 admin.site.register(Blog)
 admin.site.register(Review)
+admin.site.register(Rating, RatingAdmin)

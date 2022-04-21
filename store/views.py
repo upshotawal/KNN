@@ -1,5 +1,7 @@
 from os import stat
+import re
 from site import addusersitepackages
+from tkinter import N
 import django
 from django.contrib.auth.models import User
 from store.models import Address, Cart, Category, Order, Product
@@ -24,6 +26,7 @@ from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from django.template import Context
 from django.views.generic import ListView
+from django.db.models import Q
 
 
 # Create your views here.
@@ -70,7 +73,7 @@ def detail(request, slug):
             try:
                 '''
                     filtering the products database by product title, with respect to
-                    the obtained flask recommendation api. 
+                    the obtained flask recommendation api.
                 '''
                 recommend = Product.objects.get(title=x)
                 obj_list.append(recommend)
@@ -79,6 +82,7 @@ def detail(request, slug):
                 pass
 
     context = {
+
         'product': product,
         'related_products': related_products,
         'recommendated': obj_list
@@ -91,18 +95,59 @@ def all_categories(request):
     categories = Category.objects.filter(is_active=True)
     return render(request, 'store/categories.html', {'categories': categories})
 
+# # /////////    NORMAL QUERY SEARCH FOR PRODUCTS    /////////
+
+# def category_products(request, slug):
+#     if 'q' in request.GET:
+#         q = request.GET['q']
+#         category = get_object_or_404(Category, slug=slug)
+#         products = Product.objects.filter(title__icontains=q)
+#         categories = Category.objects.filter(is_active=True)
+#         context = {
+#             'category': category,
+#             'products': products,
+#             'categories': categories,
+#         }
+#     else:
+#         category = get_object_or_404(Category, slug=slug)
+#         products = Product.objects.filter(is_active=True, category=category)
+#         categories = Category.objects.filter(is_active=True)
+#         context = {
+#             'category': category,
+#             'products': products,
+#             'categories': categories,
+#         }
+#     return render(request, 'store/category_products.html', context)
+
+
+# //////////////// SEARCH WITH COMMAS AND SAPCING ////////////
+
 
 def category_products(request, slug):
-    if 'q' in request.GET:
-        q = request.GET['q']
+
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        products = None
+        count_search = None
+        if query:
+
+            for ing in query.split():
+
+                products = Product.objects.filter(
+                    Q(title__icontains=ing) | Q(short_description__icontains=ing))
+                count_search = products.count()
+                print(ing)
         category = get_object_or_404(Category, slug=slug)
-        products = Product.objects.filter(title__icontains=q)
         categories = Category.objects.filter(is_active=True)
+
         context = {
             'category': category,
             'products': products,
             'categories': categories,
+            'count_search': count_search,
+            'query': query,
         }
+
     else:
         category = get_object_or_404(Category, slug=slug)
         products = Product.objects.filter(is_active=True, category=category)
@@ -131,14 +176,14 @@ class RegistrationView(View):
         return render(request, 'account/register.html', {'form': form})
 
 
-@login_required
+@ login_required
 def profile(request):
     addresses = Address.objects.filter(user=request.user)
     orders = Order.objects.filter(user=request.user)
     return render(request, 'account/profile.html', {'addresses': addresses, 'orders': orders})
 
 
-@method_decorator(login_required, name='dispatch')
+@ method_decorator(login_required, name='dispatch')
 class AddressView(View):
     def get(self, request):
         form = AddressForm()
@@ -157,7 +202,7 @@ class AddressView(View):
         return redirect('store:profile')
 
 
-@login_required
+@ login_required
 def remove_address(request, id):
     a = get_object_or_404(Address, user=request.user, id=id)
     a.delete()
@@ -165,7 +210,7 @@ def remove_address(request, id):
     return redirect('store:profile')
 
 
-@login_required
+@ login_required
 def add_to_cart(request):
     user = request.user
     product_id = request.GET.get('prod_id')
@@ -183,7 +228,7 @@ def add_to_cart(request):
     return redirect('store:cart')
 
 
-@login_required
+@ login_required
 def cart(request):
     user = request.user
     cart_products = Cart.objects.filter(user=user)
@@ -211,7 +256,7 @@ def cart(request):
     return render(request, 'store/cart.html', context)
 
 
-@login_required
+@ login_required
 def remove_cart(request, cart_id):
     if request.method == 'GET':
         c = get_object_or_404(Cart, id=cart_id)
@@ -220,7 +265,7 @@ def remove_cart(request, cart_id):
     return redirect('store:cart')
 
 
-@login_required
+@ login_required
 def plus_cart(request, cart_id):
     if request.method == 'GET':
         cp = get_object_or_404(Cart, id=cart_id)
@@ -229,7 +274,7 @@ def plus_cart(request, cart_id):
     return redirect('store:cart')
 
 
-@login_required
+@ login_required
 def minus_cart(request, cart_id):
     if request.method == 'GET':
         cp = get_object_or_404(Cart, id=cart_id)
@@ -242,7 +287,7 @@ def minus_cart(request, cart_id):
     return redirect('store:cart')
 
 
-@login_required
+@ login_required
 def checkout(request):
     user = request.user
     address_id = request.GET.get('address')
@@ -256,7 +301,7 @@ def checkout(request):
     return redirect('store:orders')
 
 
-@login_required
+@ login_required
 def orders(request):
     all_orders = Order.objects.filter(
         user=request.user).order_by('-ordered_date')
@@ -307,7 +352,7 @@ def chkout(request):
 # fro payment API
 
 
-@csrf_exempt
+@ csrf_exempt
 def verify_payment(request):
     data = request.POST
     product_id = data['product_identity']
@@ -340,13 +385,13 @@ def verify_payment(request):
     return JsonResponse(f"Payment Done !! With IDX. {response_data['user']['idx']}", safe=False)
 
 
-@login_required
+@ login_required
 def blog(request):
     blogs = Blog.objects.all()[:6]
     return render(request, "store/blog.html", {"blogs": blogs})
 
 
-@login_required
+@ login_required
 def post_detail(request, slug):
     post = get_object_or_404(Blog, slug=slug)
     related_blog = Blog.objects.exclude(title=post.title)
@@ -397,3 +442,14 @@ def contact(request):
 #     out = run([sys.executable, '/script.py'], shell=False, stdout=PIPE)
 #     print(out)
 #     return render(request, 'store/index.html', {'data1': out.stdout})
+
+
+def rate(request):
+    if request.method == 'POST':
+        el_id = request.POST.get('el_id')
+        val = request.POST.get('val')
+        obj = Rating.objects.get(id=el_id)
+        obj.score = val
+        obj.save()
+        return JsonResponse({'success': 'true', 'score': val}, safe=False)
+    return JsonResponse({'success': 'false'})

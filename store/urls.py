@@ -26,6 +26,7 @@ urlpatterns = [
     path('chkout/', views.chkout, name="chkout"),
     path('orders/', views.orders, name="orders"),
     path('contact/', views.contact, name="contact"),
+    path('rate/', views.rate, name="rate"),
 
     # url for blog
     path('blog/', views.blog, name="blog"),

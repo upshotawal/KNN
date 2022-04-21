@@ -6,6 +6,7 @@ from django.db.models import CharField, Model
 from autoslug import AutoSlugField
 from django.db import models
 from ckeditor.fields import RichTextField
+from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 
@@ -168,3 +169,16 @@ class Review(models.Model):
 
     class Meta:
         ordering = ['date_added']
+
+
+class Rating(models.Model):
+    user = models.ForeignKey(User, verbose_name="User",
+                             on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name="Product",
+                                on_delete=models.CASCADE)
+    rate = models.IntegerField(default=0, validators=[
+                               MaxValueValidator(5), MinValueValidator(0)])
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.id)

@@ -22,13 +22,20 @@
               </div>
             </div>
             <!-- PRODUCT DETAILS-->
+           
+
+            
             <div class="col-lg-6">
               <ul class="list-inline mb-2">
-                <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
+                <form class ='rate-form' action='' method='POST' id='{{product.id}}'>
+                  {% csrf_token %}
+
+                  <button class="fa fa-star my-btn" id='first'></button>
+                  <button class="fa fa-star my-btn" id='second'></button>
+                  <button class="fa fa-star my-btn" id='third'></button>
+                  <button class="fa fa-star my-btn" id='fourth'></button>
+                  <button class="fa fa-star my-btn" id='fifth'></button>
+              </form>
               </ul>
               <h1>{{product.title}}</h1>
               <p class="text-muted lead">${{product.price}}</p>
@@ -47,11 +54,11 @@
                 </div>
 
                 <div class="col-sm-3 pl-sm-0">
-                  {% comment %} <a class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"  href="{% url 'store:add-to-cart' %}">Add to cart</a> {% endcomment %}
+                  {% comment %} <a class="btn btn-danger btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"  href="{% url 'store:add-to-cart' %}">Add to cart</a> {% endcomment %}
                   
                   <form action="{% url 'store:add-to-cart' %}">
                     <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
-                    <button type="submit" class="btn btn-dark btn-lg btn-block h-100 d-flex align-items-center justify-content-center px-0">Add to Cart</button>
+                    <button type="submit" class="btn btn-danger btn-lg btn-block h-100 d-flex align-items-center justify-content-center px-0">Add to Cart</button>
                   </form>
 
                 </div>
@@ -141,7 +148,7 @@
                           <form action="{% url 'store:add-to-cart' %}">
                             <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
                             <li class="list-inline-item m-0 p-0"></li>
-                            <button type="submit" class="btn btn-sm btn-dark">Add to Cart</button>
+                            <button type="submit" class="btn btn-sm btn-danger">Add to Cart</button>
                           </li>
                           </form>
                           
@@ -174,7 +181,7 @@
                       <form action="{% url 'store:add-to-cart' %}">
                         <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
                         <li class="list-inline-item m-0 p-0"></li>
-                        <button type="submit" class="btn btn-sm btn-dark">Add to Cart</button>
+                        <button type="submit" class="btn btn-sm btn-danger">Add to Cart</button>
                       </li>
                       </form>
                     </ul>

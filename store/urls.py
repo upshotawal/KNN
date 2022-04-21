@@ -2,6 +2,13 @@ from store.forms import LoginForm, PasswordChangeForm, PasswordResetForm, SetPas
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from django.contrib import admin
+
+
+# django admin costumization
+admin.site.site_header = 'Amogle Dashboard'
+admin.site.site_title = 'Welcome Rick Sanchez'
+admin.site.index_title = 'Welcome to the Citadel Of Ricks'
 
 
 app_name = 'store'

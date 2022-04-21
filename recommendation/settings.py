@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'theme',
     'django_browser_reload',
     'ckeditor',
+    'admin_interface',
+    'colorfield',
 
 ]
 

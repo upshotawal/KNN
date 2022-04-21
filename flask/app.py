@@ -50,7 +50,7 @@ def get_recommendations_product(sig=sig):
     # Get the pairwsie similarity scores
     sig_scores = list(enumerate(sig[idx]))
     # Sort the products
-    sig_scores = sorted(sig_scores, key=lambda x: x[1], reverse=True)
+    sig_scores = sorted(sig_scores, key=lambda x: x[1].all(), reverse=True)
     # Scores of the 5 most similar products
     sig_scores = sig_scores[1:6]
 

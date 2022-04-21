@@ -54,7 +54,7 @@ class Product(models.Model):
     short_description = RichTextField()
     detail_description = models.TextField(
         blank=True, null=True, verbose_name="Detail Description")
-    product_image = models.FileField(
+    product_image = models.ImageField(
         upload_to='product', blank=True, null=True, verbose_name="Product Image")
     price = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.ForeignKey(

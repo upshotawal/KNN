@@ -28,7 +28,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ('category', 'is_active', 'is_featured')
     list_filter = ('category', 'is_active', 'is_featured')
     list_per_page = 10
-    search_fields = ('title', 'category', 'short_description')
+    search_fields = ('title', 'short_description')
 
 
 class CartAdmin(admin.ModelAdmin):

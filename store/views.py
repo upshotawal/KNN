@@ -422,10 +422,11 @@ def comment(request, slug):
 def contact(request):
     if request.user.is_authenticated():
         username = request.user.username
-        useremail = request.user.email
+
         if request.method == "POST":
+            email = request.POST.get('contact')
             message_name = username
-            message_email = useremail
+            message_email = email
             message = 'hello help me'
 
             send_mail(
@@ -434,9 +435,9 @@ def contact(request):
                 message_email,
                 ['fypusphot@gmail.com', 'awalupshot@gmail.com'],
             )
-            return render(request, 'contact.html', {'message_name': message_name})
+            return render(request, 'index.html', {'message_name': message_name})
         else:
-            return render(request, 'contact.html')
+            return render(request, 'index.html')
 
 
 # def external(request):

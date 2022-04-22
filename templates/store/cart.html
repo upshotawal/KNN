@@ -190,12 +190,12 @@
             <form action="{% url 'store:checkout' %}" id="myform">
               {% if addresses %} {% for address in addresses %}
               <div class="mb-3">
-                <input type="radio" name="address" value="{{address.id}}" />
+                <input type="submit" name="address" value="{{address.id}}" />
                 <strong>Address {{forloop.counter}}</strong> <br />
                 ( {{address.locality}}, {{address.city}}, {{address.state}} )
               </div>
               {% endfor %} {% endif %}
-
+            </form>
               <!-- Set up a container element for the button -->
               <div class="text-end" id="payment-button">
                 <a class="btn btn-outline-dark btn-sm" 
@@ -206,7 +206,7 @@
               {% comment %} For Cash on Delivery {% endcomment %}
               <a class="btn btn-outline-dark btn-sm" href="{% url 'store:chkout' %}"
               >Cash on Delivery</a>
-            </form>
+            
           </div>
         </div>
       </div>

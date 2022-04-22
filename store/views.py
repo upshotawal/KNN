@@ -27,6 +27,7 @@ from django.conf import settings
 from django.template import Context
 from django.views.generic import ListView
 from django.db.models import Q
+import random
 
 
 # Create your views here.
@@ -34,7 +35,9 @@ from django.db.models import Q
 
 def home(request):
     categories = Category.objects.filter(is_active=True, is_featured=True)[:3]
-    products = Product.objects.filter(is_active=True, is_featured=True)[:8]
+    products = Product.objects.order_by('?')[:8]
+    # products = list(Product.objects.all())
+    # random.shuffle(products)
     context = {
         'categories': categories,
         'products': products,
@@ -339,6 +342,15 @@ def chkout(request):
         for p in cp:
             temp_amount = (p.quantity * p.product.price)
             amount += temp_amount
+    user = request.user
+    address_id = request.GET.get('address')
+    address = get_object_or_404(Address, id=address_id)
+
+    cart = Cart.objects.filter(user=user)
+    for c in cart:
+        Order(user=user, address=address,
+              product=c.product, quantity=c.quantity).save()
+        c.delete()
 
     context = {
 
@@ -413,11 +425,8 @@ def comment(request, slug):
         form.save()
     return render(request, 'store/add_comment.html', {'blog': blog})
 
-
-# recommendation part
-
-
 # for Email API
+
 
 def contact(request):
     if request.user.is_authenticated():
@@ -440,12 +449,6 @@ def contact(request):
             return render(request, 'index.html')
 
 
-# def external(request):
-#     out = run([sys.executable, '/script.py'], shell=False, stdout=PIPE)
-#     print(out)
-#     return render(request, 'store/index.html', {'data1': out.stdout})
-
-
 def rate(request):
     if request.method == 'POST':
         el_id = request.POST.get('el_id')
@@ -455,3 +458,59 @@ def rate(request):
         obj.save()
         return JsonResponse({'success': 'true', 'score': val}, safe=False)
     return JsonResponse({'success': 'false'})
+
+
+### ////// TESTING AREA PLEASE STAY AWAY ///////// ###
+
+# def test(request, slug):
+#     product = get_object_or_404(Product, slug=slug)
+
+#     user = request.user
+#     rating = Rating.objects.filter(product=product)
+#     headers = {
+#         'content-type': "multipart/form-data",
+#         'cache-control': "no-cache",
+#     }
+#     similar_user_recs = None
+#     obj_list = []
+#     product_name = product.title
+#     user_name = user.username
+#     rate = rating.rate
+
+#     url = "http://127.0.0.1:5000//get_userrecommendation"
+#     payload = {
+#         'product_name': product_name,
+#         'user_name': user_name,
+#         'rating': rate,
+#     }
+#     responses = requests.request("POST", url, data=payload)
+#     print(responses)
+
+#     response = json.loads(responses.text)
+
+#     print(response)
+
+#     value = tuple(response.values())
+#     print(value)
+#     for x in value:
+#         try:
+#             similar_user_recs = Product.objects.get(title=x)
+#             obj_list.append(similar_user_recs)
+#         except:
+
+#             pass
+
+#     context = {
+#         'product': product,
+#         'rcomended': obj_list,
+#     }
+#     return render(request, 'store/tests.html', context)
+
+
+# /////// RUNNING EXTERNAL SCRIPT FILE //////////
+
+
+# def external(request):
+#     out = run([sys.executable, '/script.py'], shell=False, stdout=PIPE)
+#     print(out)
+#     return render(request, 'store/index.html', {'data1': out.stdout})

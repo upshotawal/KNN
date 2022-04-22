@@ -22,11 +22,11 @@ urlpatterns = [
     path('plus-cart/<int:cart_id>/', views.plus_cart, name="plus-cart"),
     path('minus-cart/<int:cart_id>/', views.minus_cart, name="minus-cart"),
     path('cart/', views.cart, name="cart"),
-    path('checkout/', views.checkout, name="checkout"),
     path('chkout/', views.chkout, name="chkout"),
     path('orders/', views.orders, name="orders"),
     path('contact/', views.contact, name="contact"),
     path('rate/', views.rate, name="rate"),
+
 
 
     # url for blog

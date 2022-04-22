@@ -125,7 +125,7 @@ def all_categories(request):
 
 def category_products(request, slug):
 
-    if request.method == 'GET':
+    if 'q' in request.GET:
         query = request.GET.get('q')
         products = None
         count_search = None
@@ -396,20 +396,22 @@ def post_detail(request, slug):
     post = get_object_or_404(Blog, slug=slug)
     related_blog = Blog.objects.exclude(title=post.title)
 
+    return render(request, 'store/post_detail.html', {'post': post, 'related_blog': related_blog})
+
+
+def comment(request, slug):
+    blog = get_object_or_404(Blog, slug=slug)
+    user = request.user
+
     if request.method == 'POST':
-        form = ReviewForm(request.POST)
+        form = Review()
+        body = request.POST.get('body')
+        form.body = body
+        form.blog = blog
+        form.name = user
 
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.save()
-
-            return redirect('post_detail', slug=post.slug)
-
-    else:
-        form = ReviewForm()
-
-    return render(request, 'store/post_detail.html', {'post': post, 'related_blog': related_blog, 'form': form})
+        form.save()
+    return render(request, 'store/add_comment.html', {'blog': blog})
 
 
 # recommendation part
@@ -418,7 +420,6 @@ def post_detail(request, slug):
 # for Email API
 
 def contact(request):
-    username = None
     if request.user.is_authenticated():
         username = request.user.username
         useremail = request.user.email

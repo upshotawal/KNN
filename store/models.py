@@ -163,7 +163,7 @@ class Review(models.Model):
     blog = models.ForeignKey(
         Blog, related_name='comments', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    email = models.EmailField()
+    email = models.EmailField(blank=True, null=True)
     body = RichTextField()
     date_added = models.DateField(auto_now_add=True)
 

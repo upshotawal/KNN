@@ -105,14 +105,16 @@
         </div>
         {% endfor %}
     
-    </br>
-    <label for="comment" class="text-medium text-blue-600">Add a comment</label>
-
-    <form method ='post' action='.'>
-        {% csrf_token %} 
-        {{ form.as_table }}
-        <input type='submit' value='Add Comment'>
-    </form>
+    <br/>
+    
+    <a href="{% url 'store:comment' post.slug %}">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+        Add Comments
+      </button>
+    </a>
+   
+    <br/>
+    
     {% comment %} <div class="max-w-lg rounded-lg shadow-md shadow-blue-600/50">
         <form action="" class="w-full p-4">
           <div class="mb-2">

@@ -28,9 +28,11 @@ urlpatterns = [
     path('contact/', views.contact, name="contact"),
     path('rate/', views.rate, name="rate"),
 
+
     # url for blog
     path('blog/', views.blog, name="blog"),
     path('blog/<slug:slug>/', views.post_detail, name="post-detail"),
+    path('comment/<slug:slug>/', views.comment, name="comment"),
 
     # URL for Products
     path('product/<slug:slug>/', views.detail, name="product-detail"),

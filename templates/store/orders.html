@@ -48,32 +48,32 @@
                         {% endif %}
 
                         {% if order.status == 'Accepted' %}
-                        <div class="bg-light border border-primary">
+                        <div class="bg-success border border-primary">
                             <div class="p-3 bg-primary" style="width:0;"></div>
                         </div>
                         {% endif %}
 
                         {% if order.status == 'Packed' %}
-                        <div class="bg-light border border-primary">
+                        <div class="bg-success border border-primary">
                             <div class="p-3 bg-primary" style="width:40%;"></div>
                         </div>
                         {% endif %}
                         
                         
                         {% if order.status == 'On The Way' %}
-                        <div class="bg-light border border-primary">
+                        <div class="bg-success border border-primary">
                             <div class="p-3 bg-primary" style="width:70%;"></div>
                         </div>
                         {% endif %}
                         
                         {% if order.status == 'Delivered' %}
-                        <div class="bg-light border border-primary">
-                            <div class="p-3 bg-primary" style="width:100%;"></div>
+                        <div class="bg-success border border-primary">
+                            <div class="p-3 bg-success" style="width:100%;"></div>
                         </div>
                         {% endif %}
 
                         {% if order.status == 'Cancelled' %}
-                        <div class="bg-light border border-danger">
+                        <div class="bg-success border border-danger">
                             <div class="p-3 bg-danger" style="width:100%;"></div>
                         </div>
                         {% endif %}

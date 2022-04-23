@@ -1,4 +1,4 @@
-console.log('hello world')
+console.log('Thank You for the Rating')
 
 const one = document.getElementById('first')
 const two = document.getElementById('second')
@@ -90,11 +90,17 @@ if (one) {
 
     arr.forEach(item => item.addEventListener('click', (event) => {
         const val = event.target.id
+        console.log(val)
 
-        // alert('Rating has been Submitted ')
+        alert('Rating has been Submitted ')
 
+        let isSubmit = false
         form.addEventListener('submit', e => {
             e.preventDefault()
+            if (isSubmit) {
+                return
+            }
+            isSubmit = true
             const id = e.target.id
             console.log(id)
             const val_num = getNumericValue(val)

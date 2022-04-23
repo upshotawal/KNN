@@ -291,20 +291,6 @@ def minus_cart(request, cart_id):
 
 
 @ login_required
-def checkout(request):
-    user = request.user
-    address_id = request.GET.get('address')
-    address = get_object_or_404(Address, id=address_id)
-
-    cart = Cart.objects.filter(user=user)
-    for c in cart:
-        Order(user=user, address=address,
-              product=c.product, quantity=c.quantity).save()
-        c.delete()
-    return redirect('store:chkout')
-
-
-@ login_required
 def orders(request):
     all_orders = Order.objects.filter(
         user=request.user).order_by('-ordered_date')
@@ -366,35 +352,37 @@ def chkout(request):
 
 @ csrf_exempt
 def verify_payment(request):
-    data = request.POST
-    product_id = data['product_identity']
-    token = data['token']
-    amount = data['amount']
+    if request.method == "POST":
+        data = request.POST
+        product_id = data['product_identity']
+        token = data['token']
+        amount = data['amount']
+        print(token)
 
-    url = "https://khalti.com/api/v2/payment/verify/"
-    payload = {
-        "token": token,
-        "amount": amount,
-    }
-    headers = {
-        "Authorization": "Key test_secret_key_dd9644e41839430a8e9e71627b23ce6b"
-    }
+        url = "https://khalti.com/api/v2/payment/verify/"
+        payload = {
+            "token": token,
+            "amount": amount,
+        }
+        headers = {
+            "Authorization": "Key test_secret_key_dd9644e41839430a8e9e71627b23ce6b"
+        }
 
-    response = requests.post(url, payload, headers=headers)
+        response = requests.post(url, payload, headers=headers)
 
-    response_data = json.loads(response.text)
-    status_code = str(response.status_code)
+        response_data = json.loads(response.text)
+        status_code = str(response.status_code)
 
-    if status_code == '400':
-        response = JsonResponse(
-            {'status': 'false', 'message': response_data['detail']}, status=500)
-        return response
+        if status_code == '400':
+            response = JsonResponse(
+                {'status': 'false', 'message': response_data['detail']}, status=500)
+            return response
 
-    import pprint
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(response_data)
+        import pprint
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(response_data)
 
-    return JsonResponse(f"Payment Done !! With IDX. {response_data['user']['idx']}", safe=False)
+        return JsonResponse(f"Payment Done !! With IDX. {response_data['user']['idx']}", safe=False)
 
 
 @ login_required
@@ -450,11 +438,14 @@ def contact(request):
 
 
 def rate(request):
+    user = request.user
     if request.method == 'POST':
+        obj = Rating()
         el_id = request.POST.get('el_id')
         val = request.POST.get('val')
-        obj = Rating.objects.get(id=el_id)
-        obj.score = val
+        obj.product = Rating.objects.get(id=el_id)
+        obj.name = user.username
+        obj.rate = val
         obj.save()
         return JsonResponse({'success': 'true', 'score': val}, safe=False)
     return JsonResponse({'success': 'false'})

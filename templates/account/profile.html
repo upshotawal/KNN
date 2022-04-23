@@ -1,16 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<header>
+  {% comment %} <style>
+    .jumbotron {
+      background: url("{% static 'img/bannerjump.jpg' %}") 50% 0 no-repeat fixed);
+      background-size: cover;
+  }
+  </style>
+   {% endcomment %}
+</header>
     {% block content %}
 
       <div class="container py-5">
         {% include 'partials/_messages.html' %}
 
         <div class="jumbotron">
+        <img class="rounded-circle" src="{% static 'img/customer-2.png' %}" alt="" width="100">
           <h1>{{request.user.first_name}} {{request.user.last_name}}</h1>
           <p><strong>Email:</strong> {{request.user.email}}</p>
           <p><strong>Username:</strong> {{request.user.username}}</p>
-          <p><a class="btn btn-primary btn-large" href="{% url 'store:add-address' %}">Add Address »</a></p>
+          <p><a class="btn btn-danger btn-large" href="{% url 'store:add-address' %}">Add Address</a></p>
+          
         </div>
 
 

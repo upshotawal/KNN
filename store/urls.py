@@ -67,7 +67,7 @@ urlpatterns = [
         template_name='account/password_reset_complete.html'), name="password_reset_complete"),
 
     path('product/test/', views.test, name="test"),
-    path('api/verify_payment', views.verify_payment, name='verify_payment')
+    path('verify_payment', views.verify_payment, name='verify_payment')
 
 
 ]

@@ -154,6 +154,7 @@ class Blog(models.Model):
 
     shdescription = RichTextField()
     description = RichTextField()
+    likes = models.ManyToManyField(User, blank=True, related_name='likes')
 
     def __str__(self):
         return self.title
@@ -182,3 +183,20 @@ class Rating(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+LIKE_CHOICES = (
+    ('Like', 'Like'),
+    ('Unlike', 'Unlike'),
+)
+
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    value = models.CharField(choices=LIKE_CHOICES, max_length=8)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def str(self):
+        return f"{self.user}-{self.post}-{self.value}"

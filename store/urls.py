@@ -26,6 +26,7 @@ urlpatterns = [
     path('orders/', views.orders, name="orders"),
     path('contact/', views.contact, name="contact"),
     path('rate/', views.rate, name="rate"),
+    #     path('liked/', views.like_unlike_post, name='like-post-view'),
 
 
 

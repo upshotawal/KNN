@@ -451,6 +451,39 @@ def rate(request):
     return JsonResponse({'success': 'false'})
 
 
+# @login_required
+# def like_unlike_post(request):
+#     user = request.user
+#     if request.method == 'POST':
+#         blog_id = request.POST.get('blog_id')
+#         post_obj = Blog.objects.get(id=blog_id)
+
+#         if user in post_obj.likes.all():
+#             post_obj.likes.remove(user)
+#         else:
+#             post_obj.likes.add(user)
+
+#         like, created = Like.objects.get_or_create(
+#             user=user, blog_id=blog_id)
+
+#         if not created:
+#             if like.value == 'Like':
+#                 like.value = 'Unlike'
+#             else:
+#                 like.value = 'Like'
+#         else:
+#             like.value = 'Like'
+
+#             post_obj.save()
+#             like.save()
+
+#     context = {
+#         'bool': True
+#     }
+
+#     return JsonResponse(context)
+
+
 ### ////// TESTING AREA PLEASE STAY AWAY ///////// ###
 
 # def test(request, slug):

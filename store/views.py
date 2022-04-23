@@ -28,6 +28,7 @@ from django.template import Context
 from django.views.generic import ListView
 from django.db.models import Q
 import random
+from store.script import *
 
 
 # Create your views here.
@@ -36,8 +37,6 @@ import random
 def home(request):
     categories = Category.objects.filter(is_active=True, is_featured=True)[:3]
     products = Product.objects.order_by('?')[:8]
-    # products = list(Product.objects.all())
-    # random.shuffle(products)
     context = {
         'categories': categories,
         'products': products,
@@ -440,11 +439,9 @@ def contact(request):
 def rate(request):
     user = request.user
     if request.method == 'POST':
-        obj = Rating()
         el_id = request.POST.get('el_id')
         val = request.POST.get('val')
-        obj.product = Rating.objects.get(id=el_id)
-        obj.name = user.username
+        obj = Rating.objects.get(id=el_id)
         obj.rate = val
         obj.save()
         return JsonResponse({'success': 'true', 'score': val}, safe=False)

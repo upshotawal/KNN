@@ -9,7 +9,11 @@ const five = document.getElementById('fifth')
 const form = document.querySelector('.rate-form')
 const confirmBox = document.getElementById('confirm-box')
 
-const csrf = document.getElementById('csrfmiddlewaretoken')
+const csrf = document.getElementsByName('csrfmiddlewaretoken')
+console.log(form)
+console.log(confirmBox)
+console.log(csrf)
+
 
 const handleStarSelector = (size) => {
     const children = form.children

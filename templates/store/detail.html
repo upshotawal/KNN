@@ -29,12 +29,11 @@
               <ul class="list-inline mb-2">
                 <form class ='rate-form' action='' method='POST' id='{{product.id}}'>
                   {% csrf_token %}  
-
-                  <button class="fa fa-star my-btn" id='first'></button>
-                  <button class="fa fa-star my-btn" id='second'></button>
-                  <button class="fa fa-star my-btn" id='third'></button>
-                  <button class="fa fa-star my-btn" id='fourth'></button>
-                  <button class="fa fa-star my-btn" id='fifth'></button>
+                  <button type="submit" class="fa fa-star my-btn" id='first'></button>
+                  <button type="submit" class="fa fa-star my-btn" id='second'></button>
+                  <button type="submit" class="fa fa-star my-btn" id='third'></button>
+                  <button type="submit" class="fa fa-star my-btn" id='fourth'></button>
+                  <button type="submit" class="fa fa-star my-btn" id='fifth'></button>
               </form>
               </ul>
               <h1>{{product.title}}</h1>
@@ -43,7 +42,7 @@
 
               <div class="row align-items-stretch mb-4">
                 
-                <div class="col-sm-5 pr-sm-0">
+                <div class="col-sm-5 pr-sm-0" id="confirm-box">
                   <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white"><span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
                     <div class="quantity">
                       <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>

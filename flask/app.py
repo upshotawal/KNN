@@ -80,7 +80,7 @@ def get_recommendations_product(sig=sig):
 #     user = request.form.get("user_name")
 #     rating = request.form.get("rating")
 
-#     merged = ratings[['user', 'product', 'rating']]
+#     merged = [['user', 'product', 'rating']]
 #     piv = merged.pivot_table(index=['user_id'], columns=[
 #         'name'], values='user_rating')
 #     piv_norm = piv.apply(lambda x: (x-np.mean(x)) /

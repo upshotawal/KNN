@@ -29,12 +29,27 @@ from django.views.generic import ListView
 from django.db.models import Q
 import random
 from store.script import *
+from ast import literal_eval as make_tuple
 
 
 # Create your views here.
 
 
 def home(request):
+    user_id = request.user.id
+    headers = {
+        'content-type': "multipart/form-data",
+        'cache-control': "no-cache",
+
+    }
+    user_is = user_id
+    print(user_id)
+    if user_id:
+        url = "http://127.0.0.1:5000/get_user_recommendation"
+        payload = {'user_name': user_id}
+        responses = requests.request("POST", url, data=payload)
+        print(responses)
+
     categories = Category.objects.filter(is_active=True, is_featured=True)[:3]
     products = Product.objects.order_by('?')[:8]
     context = {
@@ -217,7 +232,6 @@ def add_to_cart(request):
     user = request.user
     product_id = request.GET.get('prod_id')
     product = get_object_or_404(Product, id=product_id)
-
     # Check whether the Product is alread in Cart or Not
     item_already_in_cart = Cart.objects.filter(product=product_id, user=user)
     if item_already_in_cart:
@@ -254,6 +268,7 @@ def cart(request):
         'shipping_amount': shipping_amount,
         'total_amount': amount + shipping_amount,
         'addresses': addresses,
+
     }
     return render(request, 'store/cart.html', context)
 
@@ -354,6 +369,7 @@ def verify_payment(request):
     if request.method == "POST":
         data = request.POST
         product_id = data['product_identity']
+        print(product_id)
         token = data['token']
         amount = data['amount']
         print(token)
@@ -535,3 +551,46 @@ def rate(request):
 #     out = run([sys.executable, '/script.py'], shell=False, stdout=PIPE)
 #     print(out)
 #     return render(request, 'store/index.html', {'data1': out.stdout})
+
+
+# class KhaltiVerifyView(View):
+#     def get(self, request, *args, **kwargs):
+#         token = request.GET.get("token")
+#         amount = request.GET.get("amount")
+#         o_id = request.GET.get("order_id")
+#         print(token, amount, o_id)
+
+#         url = "https://khalti.com/api/v2/payment/verify/"
+#         payload = {
+#             "token": token,
+#             "amount": amount
+#         }
+#         headers = {
+#             "Authorization": "Key live_secret_key_fc1207298be544b99fa3ad41c7d7b324"
+#         }
+
+#         order_obj = Order.objects.get(id=o_id)
+
+#         response = requests.post(url, payload, headers=headers)
+#         resp_dict = response.json()
+#         if resp_dict.get("idx"):
+#             success = True
+#             order_obj.payment_completed = True
+#             order_obj.save()
+#         else:
+#             success = False
+#         data = {
+#             "success": success
+#         }
+#         return JsonResponse(data)
+
+
+# class KhaltiRequestView(View):
+#     def get(self, request, *args, **kwargs):
+#         o_id = request.GET.get("o_id")
+#         order = Order.objects.get(id=o_id)
+#         context = {
+#             "order": order
+#         }
+#         messages.success(request, "Order Sent Successfully... ")
+#         return render(request, "khaltirequest.html", context)

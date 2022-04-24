@@ -9,6 +9,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import operator
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
+from scipy.sparse import csr_matrix
+from sklearn.neighbors import NearestNeighbors
 from sklearn.metrics.pairwise import sigmoid_kernel
 import pandas as pd
 import json
@@ -45,7 +47,18 @@ print(indices)
 # content based filtering
 
 
-# collaborative fitering
+# applying KNN fitering
+data_rating = pd.read_sql_query("SELECT * from store_rating", connect)
+products = pd.read_sql_query("SELECT * from store_product", connect)
+pivoted_data = data_rating.pivot_table(
+    index='product_id', columns='user_id', values='rate').fillna(0)
+features = csr_matrix(pivoted_data.values)
+
+
+model = NearestNeighbors(metric='cosine', algorithm='brute')
+model.fit(features)
+
+# KNN filteringS
 
 
 @app.route('/get_recommendation', methods=['POST', 'GET'])
@@ -74,111 +87,118 @@ def get_recommendations_product(sig=sig):
     return jsonify(items), 201
 
 
-# @app.route('/get_userrecommendation', methods=['POST', 'GET'])
-# def makin_table():
-#     product = request.form.get("product_name")
-#     user = request.form.get("user_name")
-#     rating = request.form.get("rating")
 
-#     merged = [['user', 'product', 'rating']]
-#     piv = merged.pivot_table(index=['user_id'], columns=[
-#         'name'], values='user_rating')
-#     piv_norm = piv.apply(lambda x: (x-np.mean(x)) /
-#                          (np.max(x)-np.min(x)), axis=1)
-#     piv_norm.fillna(0, inplace=True)
-#     piv_norm = piv_norm.T
-#     piv_norm = piv_norm.loc[:, (piv_norm != 0).any(axis=0)]
+# Applying Corelation Matrix ///////////
 
-#     piv_sparse = sp.sparse.csr_matrix(piv_norm.values)
+# collaborative filtering
+product_df = pd.DataFrame(products)
+product_df.rename(columns={'id': 'product_id'}, inplace=True)
+product_df.head(2)
+# print(product_df)
 
-#     item_similarity = cosine_similarity(piv_sparse)
-#     user_similarity = cosine_similarity(piv_sparse.T)
+# merging the ratings and products column for getting the ratings and product title
+merged = product_df.merge(ratings, left_on='product_id', right_on='product_id')
 
-#     item_sim_df = pd.DataFrame(
-#         item_similarity, index=piv_norm.index, columns=piv_norm.index)
-#     user_sim_df = pd.DataFrame(
-#         user_similarity, index=piv_norm.columns, columns=piv_norm.columns)
-#     return item_sim_df, user_sim_df, piv_norm, piv_sparse, piv
+# only taking the required column
+merged = merged[['user_id', 'title', 'rate']]
+# print(merged)
 
-# # This function will return the top 10 shows with the highest cosine similarity value
+piv = merged.pivot_table(index=['user_id'], columns=[
+                         'title'], values='rate')
+print(piv)
+
+# Note: As we are subtracting the mean from each rating to standardize
+# all users with only one rating or who had rated everything the same will be dropped
+
+# Normalize the values
+piv_norm = piv.apply(lambda x: (x-np.mean(x))/(np.max(x)-np.min(x)), axis=1)
 
 
-# def top_products(product_name, item_sim_df):
-#     product_name = request.form.get("product_name")
-#     count = 1
-#     print('Similar shows to {} include:\n'.format(product_name))
-#     for item in item_sim_df.sort_values(by=product_name, ascending=False).index[1:11]:
-#         print('No. {}: {}'.format(count, item))
-#         count += 1
+# Drop all columns containing only zeros representing users who did not rate
+piv_norm.fillna(0, inplace=True)
+piv_norm = piv_norm.T
+piv_norm = piv_norm.loc[:, (piv_norm != 0).any(axis=0)]
+print(piv_norm)
 
-# # This function will return the top 5 users with the highest similarity value
+# Our data needs to be in a sparse matrix format to be read by the following functions
 
+piv_sparse = sp.sparse.csr_matrix(piv_norm.values)
+# print(piv_sparse)
 
-# def top_users(user, piv_norm, user_sim_df):
-#     user = request.form.get("user_name")
+item_similarity = cosine_similarity(piv_sparse)
+user_similarity = cosine_similarity(piv_sparse.T)
 
-#     if user not in piv_norm.columns:
-#         return('No data available on user {}'.format(user))
+# Inserting the similarity matricies into dataframe objects
 
-#     print('Most Similar Users:\n')
-#     sim_values = user_sim_df.sort_values(
-#         by=user, ascending=False).loc[:, user].tolist()[1:11]
-#     sim_users = user_sim_df.sort_values(by=user, ascending=False).index[1:11]
-#     zipped = zip(sim_users, sim_values,)
-#     for user, sim in zipped:
-#         print('User #{0}, Similarity value: {1:.2f}'.format(user, sim))
+item_sim_df = pd.DataFrame(
+    item_similarity, index=piv_norm.index, columns=piv_norm.index)
+user_sim_df = pd.DataFrame(
+    user_similarity, index=piv_norm.columns, columns=piv_norm.columns)
 
 
-# # This function constructs a list of lists containing the highest rated shows per similar user
-# # and returns the name of the show along with the frequency it appears in the list
-
-# def similar_user_rec(user, piv_norm, user_sim_df):
-
-#     if user not in piv_norm.columns:
-#         return('No data available on user {}'.format(user))
-
-#     sim_users = user_sim_df.sort_values(by=user, ascending=False).index[1:11]
-#     best = []
-#     most_common = {}
-
-#     for i in sim_users:
-#         max_score = piv_norm.loc[:, i].max()
-#         best.append(piv_norm[piv_norm.loc[:, i] == max_score].index.tolist())
-#     for i in range(len(best)):
-#         for j in best[i]:
-#             if j in most_common:
-#                 most_common[j] += 1
-#             else:
-#                 most_common[j] = 1
-#     sorted_list = sorted(most_common.items(),
-#                          key=operator.itemgetter(1), reverse=True)
-#     return sorted_list[:5]
-
-# # This function calculates the weighted average of similar users
-# # to determine a potential rating for an input user and show
+# Corelation Matrix////////////////////
 
 
-# def predicted_rating(product_name, user, user_sim_df, piv):
-#     sim_users = user_sim_df.sort_values(by=user, ascending=False).index[1:1000]
-#     user_values = user_sim_df.sort_values(
-#         by=user, ascending=False).loc[:, user].tolist()[1:1000]
-#     rating_list = []
-#     weight_list = []
-#     for j, i in enumerate(sim_users):
-#         rating = piv.loc[i, product_name]
-#         similarity = user_values[j]
-#         if np.isnan(rating):
-#             continue
-#         elif not np.isnan(rating):
-#             rating_list.append(rating*similarity)
-#             weight_list.append(similarity)
-#     return sum(rating_list)/sum(weight_list)
+
+@app.route('/get_user_recommendation', methods=['POST', 'GET'])
+def similar_user_recs(user):
+    if user not in piv_norm.columns:
+        return('No data available on user {}'.format(user))
+
+    sim_users = user_sim_df.sort_values(by=user, ascending=False).index[1:11]
+    best = []
+    most_common = {}
+
+    for i in sim_users:
+        max_score = piv_norm.loc[:, i].max()
+        best.append(piv_norm[piv_norm.loc[:, i] == max_score].index.tolist())
+    for i in range(len(best)):
+        for j in best[i]:
+            if j in most_common:
+                most_common[j] += 1
+            else:
+                most_common[j] = 1
+    sorted_list = sorted(most_common.items(),
+                         key=operator.itemgetter(1), reverse=True)
+    return sorted_list[:5]
 
 
-# def get_recommendations_user(similar_user_rec):
-#     similar_user_recs = similar_user_rec(4)
-#     return jsonify(similar_user_recs), 201
+@app.route('/user_recommendation', methods=['POST', 'GET'])
+def user_recommendation(piv_norm=piv_norm, user_sim_df=user_sim_df):
+    user = request.form.get('user_id')
+    print(user)  # got the user id from django, response 200, OK
 
+    j = similar_user_recs(user)
+    return jsonify(j)
+
+# @app.route('/recommend',methods=["POST","GET"])
+# def hello_world():
+#     users = request.form.get("user_id")
+#     user_id = int(users)
+
+
+#     distances,indices = model.kneighbors(pivoted_data.iloc[user_id,:].values.reshape(1,-1),n_neighbors=7)
+
+#     recommended_items = set()
+#     recommend_dict = dict()
+#     newdic = dict()
+#     for i in range(0,len(distances.flatten())):
+#         if i == 0:
+#             print('Recommendations for {0}:\n'.format(pivoted_data.index[user_id]))
+#         else:
+#             print('{0}: {1}, with distance of {2}:'.format(i, pivoted_data.index[indices.flatten()[i]],distances.flatten()[i]))
+#             recommend_dict.update({i: pivoted_data.index[indices.flatten()[i]]})
+
+#             recommended_items.add(pivoted_data.index[indices.flatten()[i]])
+#     print(recommend_dict.items())
+#     for k, v in recommend_dict.items():
+#         newdic[str(k)]=str(v)
+
+#     items = tuple(recommended_items)
+#     recommended = '{}'.format(recommend_dict)
+#     value = jsonify(newdic)
+
+#     return value
 
 @app.route('/')
 def index():

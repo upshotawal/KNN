@@ -253,7 +253,7 @@
     publicKey: "test_public_key_b8af7d684b334617af3c6939a3172f10",
     productIdentity: "1234567890",
     productName: "Dragon",
-    productUrl: "http://gameofthrones.wikia.com/wiki/Dragons",
+    productUrl: "http://127.0.0.1:8000/",
     paymentPreference: [
       "KHALTI",
       "EBANKING",
@@ -279,7 +279,7 @@
   var btn = document.getElementById("payment-button");
   btn.onclick = function () {
     // minimum transaction amount must be 10, i.e 1000 in paisa.
-    checkout.show({ amount: 1000 });
+    checkout.show({ amount: {{total_amount}} });
   };
 </script>
 {% endblock payment-gateway %}

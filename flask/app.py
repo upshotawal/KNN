@@ -87,9 +87,7 @@ def get_recommendations_product(sig=sig):
     return jsonify(items), 201
 
 
-
 # Applying Corelation Matrix ///////////
-
 # collaborative filtering
 product_df = pd.DataFrame(products)
 product_df.rename(columns={'id': 'product_id'}, inplace=True)
@@ -105,7 +103,7 @@ merged = merged[['user_id', 'title', 'rate']]
 
 piv = merged.pivot_table(index=['user_id'], columns=[
                          'title'], values='rate')
-print(piv)
+# print(piv)
 
 # Note: As we are subtracting the mean from each rating to standardize
 # all users with only one rating or who had rated everything the same will be dropped
@@ -118,7 +116,7 @@ piv_norm = piv.apply(lambda x: (x-np.mean(x))/(np.max(x)-np.min(x)), axis=1)
 piv_norm.fillna(0, inplace=True)
 piv_norm = piv_norm.T
 piv_norm = piv_norm.loc[:, (piv_norm != 0).any(axis=0)]
-print(piv_norm)
+# print(piv_norm)
 
 # Our data needs to be in a sparse matrix format to be read by the following functions
 
@@ -137,7 +135,6 @@ user_sim_df = pd.DataFrame(
 
 
 # Corelation Matrix////////////////////
-
 
 
 @app.route('/get_user_recommendation', methods=['POST', 'GET'])
@@ -164,12 +161,13 @@ def similar_user_recs(user):
 
 
 @app.route('/user_recommendation', methods=['POST', 'GET'])
-def user_recommendation(piv_norm=piv_norm, user_sim_df=user_sim_df):
+def user_recommendation(piv_norm=piv_norm, user_sim_df=user_sim_df,):
     user = request.form.get('user_id')
     print(user)  # got the user id from django, response 200, OK
 
     j = similar_user_recs(user)
     return jsonify(j)
+
 
 # @app.route('/recommend',methods=["POST","GET"])
 # def hello_world():

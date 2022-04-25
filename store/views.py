@@ -42,13 +42,16 @@ def home(request):
         'cache-control': "no-cache",
 
     }
-    user_is = user_id
+    user_id = user_id
     print(user_id)
     if user_id:
-        url = "http://127.0.0.1:5000/get_user_recommendation"
-        payload = {'user_name': user_id}
+        url = "http://127.0.0.1:5000/user_recommendation"
+        payload = {'user_id': user_id}
         responses = requests.request("POST", url, data=payload)
         print(responses)
+
+        response = json.loads(responses.text)
+        print(response)
 
     categories = Category.objects.filter(is_active=True, is_featured=True)[:3]
     products = Product.objects.order_by('?')[:8]

@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 import numpy as np
 import json
 import scipy as sp
+from sklearn.metrics import recall_score
 from sklearn.metrics.pairwise import cosine_similarity
 import operator
 import requests
@@ -38,11 +39,11 @@ tfv = TfidfVectorizer(min_df=3,  max_features=None,
                       stop_words='english')
 
 tfv_matrix = tfv.fit_transform(products['title'])
-print(tfv_matrix.shape)
+# print(tfv_matrix.shape)
 
 sig = sigmoid_kernel(tfv_matrix, tfv_matrix)
 indices = pd.Series(products.index, index=products['title']).drop_duplicates()
-print(indices)
+# print(indices)
 
 # content based filtering
 
@@ -116,12 +117,12 @@ piv_norm = piv.apply(lambda x: (x-np.mean(x))/(np.max(x)-np.min(x)), axis=1)
 piv_norm.fillna(0, inplace=True)
 piv_norm = piv_norm.T
 piv_norm = piv_norm.loc[:, (piv_norm != 0).any(axis=0)]
-# print(piv_norm)
+print(piv_norm)
 
 # Our data needs to be in a sparse matrix format to be read by the following functions
 
 piv_sparse = sp.sparse.csr_matrix(piv_norm.values)
-# print(piv_sparse)
+print(piv_sparse)
 
 item_similarity = cosine_similarity(piv_sparse)
 user_similarity = cosine_similarity(piv_sparse.T)
@@ -162,11 +163,11 @@ def similar_user_recs(user):
 
 @app.route('/user_recommendation', methods=['POST', 'GET'])
 def user_recommendation(piv_norm=piv_norm, user_sim_df=user_sim_df,):
-    user = request.form.get('user_id')
-    print(user)  # got the user id from django, response 200, OK
+    rec = request.form.get('user_id')
+    # got the user id from django, response 200, OK
+    print(rec)
 
-    j = similar_user_recs(user)
-    return jsonify(j)
+    return jsonify((similar_user_recs(rec))), 201
 
 
 # @app.route('/recommend',methods=["POST","GET"])

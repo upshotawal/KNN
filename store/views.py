@@ -45,21 +45,39 @@ def home(request):
     user_id = user_id
     print(user_id)
     if user_id:
-        url = "http://127.0.0.1:5000/user_recommendation"
+        categories = Category.objects.filter(
+            is_active=True, is_featured=True)[:3]
+        products = Product.objects.order_by('?')[:8]
+        contexts={
+        'message':'Please log in firts.'
+        }
+        url = "http://127.0.0.1:5000/recommend"
         payload = {'user_id': user_id}
         responses = requests.request("POST", url, data=payload)
         print(responses)
 
         response = json.loads(responses.text)
-        print(response)
+        respnses_tuple = make_tuple(response)
+        context = list()
 
-    categories = Category.objects.filter(is_active=True, is_featured=True)[:3]
-    products = Product.objects.order_by('?')[:8]
-    context = {
-        'categories': categories,
-        'products': products,
-    }
-    return render(request, 'store/index.html', context)
+        for user_id in respnses_tuple:
+            try:
+                recommended = Product.objects.get(id=user_id)
+                context.append(recommended)
+            except:
+                pass
+        # contexts = Moviess.objects.all()
+        # query = request.GET.get('q')
+        context = {
+            'context': context,
+            'categories': categories,
+            'products': products,
+        }
+        return render(request, 'store/index.html', context)
+    else:
+
+        
+        return render(request, 'store/index.html', contexts)
 
 
 def detail(request, slug):

@@ -170,34 +170,25 @@ def user_recommendation(piv_norm=piv_norm, user_sim_df=user_sim_df,):
     return jsonify((similar_user_recs(rec))), 201
 
 
-# @app.route('/recommend',methods=["POST","GET"])
-# def hello_world():
-#     users = request.form.get("user_id")
-#     user_id = int(users)
+@app.route('/recommend', methods=["POST", "GET"])
+def hello_world():
+    users = request.form.get("user_id")
+    user_id = int(users)
+    distances, indices = model.kneighbors(
+        pivoted_data.iloc[user_id, :].values.reshape(1, -1), n_neighbors=5)
+    recommended_items = set()
+    for i in range(0, len(distances.flatten())):
+        if i == 0:
+            print('Recommendations for {0}:\n'.format(
+                pivoted_data.index[user_id]))
+        else:
+            print('{0}: {1}, with distance of {2}:'.format(
+                i, pivoted_data.index[indices.flatten()[i]], distances.flatten()[i]))
+            recommended_items.add(pivoted_data.index[indices.flatten()[i]])
+    items = tuple(recommended_items)
+    recommended = '{}'.format(items)
+    return jsonify(recommended)
 
-
-#     distances,indices = model.kneighbors(pivoted_data.iloc[user_id,:].values.reshape(1,-1),n_neighbors=7)
-
-#     recommended_items = set()
-#     recommend_dict = dict()
-#     newdic = dict()
-#     for i in range(0,len(distances.flatten())):
-#         if i == 0:
-#             print('Recommendations for {0}:\n'.format(pivoted_data.index[user_id]))
-#         else:
-#             print('{0}: {1}, with distance of {2}:'.format(i, pivoted_data.index[indices.flatten()[i]],distances.flatten()[i]))
-#             recommend_dict.update({i: pivoted_data.index[indices.flatten()[i]]})
-
-#             recommended_items.add(pivoted_data.index[indices.flatten()[i]])
-#     print(recommend_dict.items())
-#     for k, v in recommend_dict.items():
-#         newdic[str(k)]=str(v)
-
-#     items = tuple(recommended_items)
-#     recommended = '{}'.format(recommend_dict)
-#     value = jsonify(newdic)
-
-#     return value
 
 @app.route('/')
 def index():

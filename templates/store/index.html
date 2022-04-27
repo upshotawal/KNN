@@ -44,10 +44,50 @@
           {% endif %}
           </div>
 
-          {% for place in context %}
-          {{place.name}}
+          
+          
+          <div class='container p-5'>
+            <header class="text-center">
+              <p class="small text-muted small text-uppercase mb-1">Recommended Products For</p>
+              <h2 class="h5 text-uppercase mb-4">{{user.username}}</h2>
+            </header>
+            <div class="row">
+              {% for i in context %}
+              <div class="col-lg-3 col-sm-6">
+                <div class="product text-center skel-loader">
+                  <div class="d-block mb-3 position-relative">
+                    <a class="d-block" href="{% url 'store:product-detail' i.slug %}">
+                      
+                        <img class="img-fluid w-100" src="{{i.product_image}}" alt="{{i.title}}">
+  
+                    </a>
+  
+                    <div class="product-overlay">
+                      <ul class="mb-0 list-inline">
+                        <form action="{% url 'store:add-to-cart' %}">
+                          <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                          <li class="list-inline-item m-0 p-0"></li>
+                          <button type="submit" class="btn btn-sm btn-danger">Add to Cart</button>
+                        </li>
+                        </form>
+                      </ul>
+                    </div>
+                  </div>
+                  <h6> <a class="reset-anchor" href="{% url 'store:product-detail' i.slug %}">{{i.title}}</a></h6>
+                  <p class="small text-muted">${{i.price}}</p>
+                </div>
+              </div>
+              
+              
+              {% endfor %}
+          </div>
+  
+  
+             
+  
+          </div>
     
-          {% endfor %}
+      
         <!-- TRENDING PRODUCTS-->
         <section class="py-5">
           <header>

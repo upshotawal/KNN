@@ -5,6 +5,7 @@
     {% block content %}
 
       <div class="container py-5">
+        {% include 'partials/_messages.html' %}
 
 
         <div class="row">
@@ -23,12 +24,14 @@
                       <th>Image</th>
                       <th>Qty.</th>
                       <th>Ordered Date</th>
+                      <th>Delete Items</th>
                       <th>Status</th>
                     </tr>
                   </thead>
                   <tbody>
 
                     {% if orders %}
+                    
 
                     {% for order in orders %}
                     <tr>
@@ -41,6 +44,33 @@
                       </td>
                       <td>{{order.quantity}}</td>
                       <td>{{order.ordered_date|naturaltime}}</td>
+                      <td>
+                        
+                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal">Remove</button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel"> {{user.username}} are you sure?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                Product {{order.product.title}} will be deleted from your order list.
+                              </div>
+                              <div class="modal-footer">
+                                <a
+                    
+                                    href="{% url 'store:remove-order' order.id %}"
+                                    >
+                                <button type="submit" class="btn btn-danger">Confirm</button></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      
+                      </td>
                       <td>
 
                         {% if order.status == 'Pending' %}

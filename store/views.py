@@ -48,9 +48,7 @@ def home(request):
         categories = Category.objects.filter(
             is_active=True, is_featured=True)[:3]
         products = Product.objects.order_by('?')[:8]
-        contexts={
-        'message':'Please log in firts.'
-        }
+
         url = "http://127.0.0.1:5000/recommend"
         payload = {'user_id': user_id}
         responses = requests.request("POST", url, data=payload)
@@ -75,8 +73,15 @@ def home(request):
         }
         return render(request, 'store/index.html', context)
     else:
+        categories = Category.objects.filter(
+            is_active=True, is_featured=True)[:3]
+        products = Product.objects.order_by('?')[:8]
+        contexts = {
+            'message': 'Please log in firts.',
+            'categories': categories,
+            'products': products,
+        }
 
-        
         return render(request, 'store/index.html', contexts)
 
 
@@ -301,6 +306,15 @@ def remove_cart(request, cart_id):
         c.delete()
         messages.success(request, "Product removed from Cart.")
     return redirect('store:cart')
+
+
+@ login_required
+def remove_order(request, order_id):
+    if request.method == 'GET':
+        o = get_object_or_404(Order, id=order_id)
+        o.delete()
+        messages.success(request, "Product removed from Order List.")
+    return redirect('store:orders')
 
 
 @ login_required

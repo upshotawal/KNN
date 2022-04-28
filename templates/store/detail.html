@@ -162,7 +162,7 @@
               {% endfor %}
             {% endif %}
               </br>
-            <div class='container'>
+            <div class='container p-5'>
           <h2 class="h5 text-uppercase mb-4">Similar Products for {{product.title}}</h2>
           <div class="row">
             {% for x in recommendated %}
@@ -178,7 +178,7 @@
                   <div class="product-overlay">
                     <ul class="mb-0 list-inline">
                       <form action="{% url 'store:add-to-cart' %}">
-                        <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                        <input type="hidden" name="prod_id" value="{{x.id}}" id="product_id">
                         <li class="list-inline-item m-0 p-0"></li>
                         <button type="submit" class="btn btn-sm btn-danger">Add to Cart</button>
                       </li>

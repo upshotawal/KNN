@@ -65,7 +65,7 @@
                     <div class="product-overlay">
                       <ul class="mb-0 list-inline">
                         <form action="{% url 'store:add-to-cart' %}">
-                          <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                          <input type="hidden" name="prod_id" value="{{i.id}}" id="product_id">
                           <li class="list-inline-item m-0 p-0"></li>
                           <button type="submit" class="btn btn-sm btn-danger">Add to Cart</button>
                         </li>

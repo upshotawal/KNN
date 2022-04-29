@@ -23,9 +23,15 @@
                       <th>Item</th>
                       <th>Image</th>
                       <th>Qty.</th>
-                      <th>Ordered Date</th>
-                      <th>Delete Items</th>
+                      <th>Ordered Date</th>{% for order in orders %}
+                      {% if order.status == 'On The Way' %}
                       <th>Status</th>
+                      {% else %}
+                      <th>Delete Items</th>
+                      
+                      <th>Status</th>{% endif %}
+                      {%endfor%}
+
                     </tr>
                   </thead>
                   <tbody>
@@ -44,8 +50,10 @@
                       </td>
                       <td>{{order.quantity}}</td>
                       <td>{{order.ordered_date|naturaltime}}</td>
-                      <td>
-                        
+                      {% if order.status == 'On The Way' %}
+                      <h3>CANT REMOVE</h3>
+                      {% else %}
+                      <td>  
                         <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal">Remove</button>
                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog" role="document">
@@ -71,6 +79,7 @@
                         </div>
                       
                       </td>
+                      {% endif %}
                       <td>
 
                         {% if order.status == 'Pending' %}
@@ -102,7 +111,7 @@
                         </div>
                         {% endif %}
 
-                        {% if order.status == 'Cancelled' %}
+                        {% if order.status == 'Payed Already' %}
                         <div class="bg-success border border-danger">
                             <div class="p-3 bg-danger" style="width:100%;"></div>
                         </div>

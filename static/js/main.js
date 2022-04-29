@@ -119,11 +119,11 @@ if (one) {
                 },
                 success: function(responce) {
                     console.log(responce)
-                    confirmBox.innerHTML = `<h1>Successfully rated with ${responce.score}</h1>`
+                    confirmBox.innerHTML = `<h5>Successfully rated with ${responce.score}</h5>`
                 },
                 error: function(error) {
                     console.log(error)
-                    confirmBox.innerHTML = `<h1>Sorry Bad Day</h1>`
+                    confirmBox.innerHTML = `<h5>.</h5>`
                 }
 
             })

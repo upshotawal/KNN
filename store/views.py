@@ -489,10 +489,14 @@ def contact(request):
 
 def rate(request):
     user = request.user
+
     if request.method == 'POST':
+        products = Product.objects.get(id=id)
         el_id = request.POST.get('el_id')
         val = request.POST.get('val')
         obj = Rating.objects.get(id=el_id)
+        obj.user = user.username
+        obj.product = products.title
         obj.rate = val
         obj.save()
         return JsonResponse({'success': 'true', 'score': val}, safe=False)

@@ -7,6 +7,11 @@
     border: 0 !important;
 }
 
+.my-bt {
+    background-color: inherit !important;
+    border: 0 !important;
+}
+
 
 /* .jumbotron {
     background: url("/static/img/bannerjum.jpg") no-repeat center center;

@@ -271,6 +271,26 @@ def add_to_cart(request):
 
 
 @ login_required
+def add_to_favourate(request):
+    user = request.user
+    product_id = request.GET.get('prod_id')
+    product = get_object_or_404(Product, id=product_id)
+
+    Fav(user=user, product=product).save()
+
+    return redirect('store:fav')
+
+
+def fav(request):
+    user = request.user
+    fav_products = Fav.objects.filter(user=user)
+    context = {
+        'fav_products': fav_products,
+    }
+    return render(request, 'store/fav.html', context)
+
+
+@ login_required
 def cart(request):
     user = request.user
     cart_products = Cart.objects.filter(user=user)

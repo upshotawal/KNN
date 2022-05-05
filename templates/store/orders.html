@@ -23,14 +23,15 @@
                       <th>Item</th>
                       <th>Image</th>
                       <th>Qty.</th>
-                      <th>Ordered Date</th>{% for order in orders %}
+                      <th>Ordered Date</th>
+                      {% if orders %}
                       {% if order.status == 'On The Way' %}
                       <th>Status</th>
                       {% else %}
                       <th>Delete Items</th>
                       
                       <th>Status</th>{% endif %}
-                      {%endfor%}
+                      {%endif%}
 
                     </tr>
                   </thead>

@@ -31,6 +31,8 @@ urlpatterns = [
     #     path('liked/', views.like_unlike_post, name='like-post-view'),
 
 
+    path('add-to-favourate/', views.add_to_favourate, name="add-to-favourate"),
+    path('fav/', views.fav, name="fav"),
 
     # url for blog
     path('blog/', views.blog, name="blog"),

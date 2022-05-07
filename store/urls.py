@@ -21,6 +21,8 @@ urlpatterns = [
     path('remove-cart/<int:cart_id>/', views.remove_cart, name="remove-cart"),
     path('remove-order/<int:order_id>/',
          views.remove_order, name="remove-order"),
+    path('remove-fav/<int:fav_id>/',
+         views.remove_fav, name="remove-fav"),
     path('plus-cart/<int:cart_id>/', views.plus_cart, name="plus-cart"),
     path('minus-cart/<int:cart_id>/', views.minus_cart, name="minus-cart"),
     path('cart/', views.cart, name="cart"),

@@ -338,6 +338,14 @@ def remove_order(request, order_id):
 
 
 @ login_required
+def remove_fav(request, fav_id):
+    if request.method == 'GET':
+        f = get_object_or_404(Fav, id=fav_id)
+        f.delete()
+    return redirect('store:fav')
+
+
+@ login_required
 def plus_cart(request, cart_id):
     if request.method == 'GET':
         cp = get_object_or_404(Cart, id=cart_id)

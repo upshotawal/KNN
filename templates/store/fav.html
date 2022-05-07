@@ -29,6 +29,13 @@
                             <button type="submit" class="btn btn-sm btn-danger">Add to Cart</button>
                           </li>
                           </form>
+                          <a
+                            class="reset-anchor"
+                            href="{% url 'store:remove-fav' f.id %}"
+                            ><i class="fas fa-trash-alt small text-muted"></i
+                          ></a>
+
+
                           
                         </ul>
                       </div>

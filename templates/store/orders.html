@@ -52,7 +52,7 @@
                       <td>{{order.quantity}}</td>
                       <td>{{order.ordered_date|naturaltime}}</td>
                       {% if order.status == 'On The Way' %}
-                      <h3>CANT REMOVE</h3>
+                      
                       {% else %}
                       <td>  
                         <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal">Remove</button>

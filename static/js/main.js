@@ -6,13 +6,14 @@ const three = document.getElementById('third')
 const four = document.getElementById('fourth')
 const five = document.getElementById('fifth')
 
+
 const form = document.querySelector('.rate-form')
-const confirmBox = document.getElementById('confirm-box')
+let rating = 0;
 
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
-console.log(form)
-console.log(confirmBox)
-console.log(csrf)
+    // console.log(form)
+    // console.log(confirmBox)
+    // console.log(csrf)
 
 
 const handleStarSelector = (size) => {
@@ -37,40 +38,45 @@ const handleSelect = (selection) => {
                 // four.classList.remove('checked')
                 // five.classList.remove('checked')
                 handleStarSelector(1)
-
-                return
+                rating = 1;
+                break;
 
             }
         case 'second':
             {
 
                 handleStarSelector(2)
-                return
+                rating = 2;
+                break;
 
             }
         case 'third':
             {
                 handleStarSelector(3)
-                return
+                rating = 3;
+                break;
 
             }
         case 'fourth':
             {
                 handleStarSelector(4)
-                return
+                rating = 4;
+                break;
 
             }
         case 'fifth':
             {
                 handleStarSelector(5)
-                return
+                rating = 5;
+                break;
 
             }
     }
 }
 
 const getNumericValue = (stringValue) => {
-    let numericValue;
+
+    console.log(stringValue)
     if (stringValue === 'first') {
         numericValue = 1
     } else if (stringValue === 'second') {
@@ -84,6 +90,7 @@ const getNumericValue = (stringValue) => {
     } else {
         numericValue = 0
     }
+    console.log(numericValue)
     return numericValue
 }
 
@@ -97,17 +104,14 @@ if (one) {
         console.log(val)
 
         alert('Rating has been Submitted ')
-
-        let isSubmit = false
         form.addEventListener('submit', e => {
             e.preventDefault()
-            if (isSubmit) {
-                return
-            }
-            isSubmit = true
-            const id = e.target.id
-            console.log(id)
-            const val_num = getNumericValue(val)
+            console.log(rating)
+            const id = e.target.id;
+            console.log("id:", id)
+            console.log(typeof(rating));
+            console.log(typeof(id));
+            console.log(id);
 
             $.ajax({
                 type: 'POST',
@@ -115,17 +119,16 @@ if (one) {
                 data: {
                     'csrfmiddlewaretoken': csrf[0].value,
                     'el_id': id,
-                    'val': val_num,
+                    'val': rating,
                 },
                 success: function(responce) {
                     console.log(responce)
-                    confirmBox.innerHTML = `<h5>Successfully rated with ${responce.score}</h5>`
+
                 },
                 error: function(error) {
                     console.log(error)
-                    confirmBox.innerHTML = `<h5>.</h5>`
-                }
 
+                }
             })
 
         })

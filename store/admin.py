@@ -23,7 +23,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title',  'category', 'product_image',
+    list_display = ('title',  'category', 'product_image', 'sku',
                     'is_active', 'is_featured', 'updated_at')
     list_editable = ('category', 'is_active', 'is_featured')
     list_filter = ('category', 'is_active', 'is_featured')
